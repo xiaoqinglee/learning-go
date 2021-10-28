@@ -6,6 +6,6 @@ import (
 
 func main() {
 
-	ch1.Dup1()
+	ch1.Dup3()
 
 }
