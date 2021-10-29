@@ -6,6 +6,6 @@ import (
 
 func main() {
 
-	ch1.Dup3()
+	ch1.Server3()
 
 }
