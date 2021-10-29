@@ -1,7 +1,10 @@
 package main
 
-import "github.com/XiaoqingLee/LearningGo/pkg/ch2"
+import (
+	"github.com/XiaoqingLee/LearningGo/pkg/ch3"
+)
 
 func main() {
-	ch2.TempConv()
+
+	ch3.Const()
 }
