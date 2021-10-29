@@ -1,11 +1,7 @@
 package main
 
-import (
-	"github.com/XiaoqingLee/LearningGo/pkg/ch1"
-)
+import "github.com/XiaoqingLee/LearningGo/pkg/ch2"
 
 func main() {
-
-	ch1.Server3()
-
+	ch2.TempConv()
 }
