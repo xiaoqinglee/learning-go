@@ -10,16 +10,19 @@ Go verbs:
 %c
 %s
 %q
-%v
+%v, %#v
 %T
 %%
+```
+```
+%[num]verb
 ```
 
 
 Go switch:
 go switch 的 case分支默认不会击穿, 如果想击穿, 使用 fallthrough 语句.
 ```
-switch coinflip(){
+switch coinflip() {
 case "heads":
 	heads++
 case "tails":
