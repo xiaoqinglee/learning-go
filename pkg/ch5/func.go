@@ -2,6 +2,7 @@ package ch5
 
 import (
 	"fmt"
+	"strings"
 )
 
 func sumA(x, y int) int {
@@ -28,6 +29,14 @@ func ignoreAllParam(int, int) int {
 func bareReturn() (rtn int) {
 	rtn = 22
 	return 44 //使用bare return的函数return语句后面如果有值, 那么这个值不会被忽略!
+}
+
+func sumVariadicFunction(vars ...int) (sum int) {
+	fmt.Printf("vars type: %T\n", vars)
+	for _, var_ := range vars {
+		sum += var_
+	}
+	return
 }
 
 func Function() {
@@ -60,5 +69,16 @@ func Function() {
 
 	//测试 bare return
 	fmt.Printf("bareReturn() returns %v\n", bareReturn()) //44
+	fmt.Println()
+
+	//匿名函数
+	fmt.Printf("%v\n", strings.Map(func(r rune) rune { return r + 1 }, "ABCabc"))
+
+	//参数变长函数
+	fmt.Printf("sumVariadicFunction(1,2,3) = %v\n", sumVariadicFunction(1, 2, 3))
+	fmt.Printf("sumVariadicFunction(1,2,3) = %v\n", sumVariadicFunction([]int{11, 22, 33}...))
+	var noneVariadicFunction func([]int) int
+	fmt.Printf("function type %T\n", noneVariadicFunction)
+	fmt.Printf("function type %T\n", sumVariadicFunction)
 
 }
