@@ -1,9 +1,9 @@
 package main
 
-import "github.com/XiaoqingLee/LearningGo/pkg/ch4"
+import "github.com/XiaoqingLee/LearningGo/pkg/ch5"
 
 func main() {
 
-	ch4.Struct()
+	ch5.Function()
 
 }
