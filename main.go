@@ -6,5 +6,5 @@ import (
 
 func main() {
 
-	ch4.Array()
+	ch4.Map()
 }
