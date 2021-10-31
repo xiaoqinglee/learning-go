@@ -26,8 +26,9 @@ import (
 type MyInt int
 
 func (instance MyInt) IncrementBoundToType() {
-	fmt.Printf("instance address: %p\n", &instance)
 	instance = MyInt(int(instance) + 1)
+	fmt.Printf("inside method: instance value: %#v\n", instance)
+	fmt.Printf("inside method: instance address: %p\n", &instance)
 }
 func (instancePointer *MyInt) IncrementBoundToTypePointer() {
 	*instancePointer = MyInt(int(*instancePointer) + 1)
@@ -43,8 +44,9 @@ type Employee struct {
 }
 
 func (instance Employee) IncrementSalaryBoundToType(amount int) {
-	fmt.Printf("instance address: %p\n", &instance)
 	instance.Salary += amount
+	fmt.Printf("inside method: instance value: %#v\n", instance)
+	fmt.Printf("inside method: instance address: %p\n", &instance)
 }
 func (instancePointer *Employee) IncrementSalaryBoundToTypePointer(amount int) {
 	(*instancePointer).Salary += amount

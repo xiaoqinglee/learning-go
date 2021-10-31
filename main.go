@@ -1,9 +1,11 @@
 package main
 
-import "github.com/XiaoqingLee/LearningGo/pkg/ch5"
+import (
+	"github.com/XiaoqingLee/LearningGo/pkg/ch4"
+)
 
 func main() {
 
-	ch5.Panic()
+	ch4.TypeMethod()
 
 }
