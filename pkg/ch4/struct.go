@@ -28,12 +28,12 @@ import (
 type MyInt int
 
 func (instance MyInt) IncrementBoundToType() {
-	instance = MyInt(int(instance) + 1)
+	instance += 1
 	fmt.Printf("inside method: instance value: %#v\n", instance)
 	fmt.Printf("inside method: instance address: %p\n", &instance)
 }
 func (instancePointer *MyInt) IncrementBoundToTypePointer() {
-	*instancePointer = MyInt(int(*instancePointer) + 1)
+	*instancePointer += 1
 }
 
 type Employee struct {

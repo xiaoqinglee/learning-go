@@ -26,6 +26,23 @@ func (f Fahrenhait) String() string {
 }
 
 func TempConv() {
+
+	//两个Celsius实例之间可以 +-*/ 运算
+	//Celsius实例和float64之间可以 +-*/ 运算
+	//一个Celsius实例和和Fahrenhait实例之间就不能 +-*/ 运算了, 虽然他们都是float64的别名.
+	var c Celsius
+	c = 42.0
+	var cc Celsius
+	cc = 40.0
+	c += cc
+	c += 2.0
+	fmt.Printf("c: %f\n", c)
+
+	////Invalid operation: c += f (mismatched types Celsius and Fahrenhait)
+	//var f Fahrenhait
+	//f = 8.0
+	//c += f
+
 	fmt.Printf("%v : %v 或 %v\n", BoilingC, CToF(BoilingC), FToC(CToF(BoilingC)))
 	fmt.Printf("%v : %v 或 %v\n", FreezingC, CToF(FreezingC), FToC(CToF(FreezingC)))
 	fmt.Printf("%v : %v 或 %v\n", AbsoluteZeroC, CToF(AbsoluteZeroC), FToC(CToF(AbsoluteZeroC)))

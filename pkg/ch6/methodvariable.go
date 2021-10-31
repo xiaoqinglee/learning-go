@@ -8,13 +8,13 @@ import (
 type MyInt int
 
 func (p *MyInt) Increment() {
-	*p = MyInt(int(*p) + 1)
+	*p += 1
 }
 func (p *MyInt) IncrementBy(by MyInt) {
-	*p = MyInt(int(*p) + int(by))
+	*p += by
 }
 func (p *MyInt) Plus(other MyInt) MyInt {
-	return MyInt(int(*p) + int(other))
+	return *p + other
 }
 func (p *MyInt) String() string {
 	return strconv.Itoa(int(*p))
