@@ -16,6 +16,8 @@ import (
 //传递的实参到底是该类型实例的拷贝还是指向该类型实例的指针值的拷贝取决于函数签名中的形参
 //接收者形参为*typeFoo时, 传递的是指针值的拷贝
 //接收者形参为typeFoo时, 传递的是实例的拷贝
+//
+//除了方法(成员函数)外, 一个*typeFoo实例可以直接使用"."访问typeFoo的字段(成员变量), Go会自动解引用
 
 ////给int绑定方法, 错误!
 ////Cannot define new methods on the non-local type 'builtin.int'

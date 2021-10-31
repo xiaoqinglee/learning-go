@@ -6,6 +6,6 @@ import (
 
 func main() {
 
-	ch6.ReceiverNil()
+	ch6.MethodVariable()
 
 }

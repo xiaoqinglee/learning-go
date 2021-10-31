@@ -15,6 +15,7 @@ func (listHead *IntList) Sum() int {
 	if listHead == nil {
 		return 0
 	} else {
+		//自动解引用, 相当于 (*listHead).nodeValue + (*listHead).next.Sum()
 		return listHead.nodeValue + listHead.next.Sum()
 	}
 }
