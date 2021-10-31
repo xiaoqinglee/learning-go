@@ -34,7 +34,7 @@ func ReceiverNil() {
 	fmt.Printf("%#v\n", linkedList) //(*ch6.IntList)(nil)
 
 	//linkedList: []
-	fmt.Printf("sum: %d\n", linkedList.Sum()) //10
+	fmt.Printf("sum: %d\n", linkedList.Sum()) //0
 	for i := 4; i >= 1; i-- {
 		linkedList = &IntList{
 			nodeValue: i,
