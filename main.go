@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/XiaoqingLee/LearningGo/pkg/ch4"
+	"github.com/XiaoqingLee/LearningGo/pkg/ch6"
 )
 
 func main() {
 
-	ch4.TypeMethod()
+	ch6.ReceiverNil()
 
 }

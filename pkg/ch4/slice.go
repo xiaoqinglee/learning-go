@@ -42,6 +42,8 @@ func Slice() {
 	fmt.Printf("p == nil: %t\n", p == nil) //true
 	fmt.Printf("q == nil: %t\n", q == nil) //false
 	fmt.Printf("j == nil: %t\n", j == nil) //false
+	j = nil
+	fmt.Printf("again: j == nil: %t\n", j == nil) //true
 
 	//Invalid operation: x == y (the operator == is not defined on []int)
 	//fmt.Printf("x == y: %t", x == y)
