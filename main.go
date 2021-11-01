@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/XiaoqingLee/LearningGo/pkg/ch6"
+	"github.com/XiaoqingLee/LearningGo/pkg/ch12"
 )
 
 func main() {
 
-	ch6.MethodVariable()
+	ch12.ReflectMethods()
 
 }
