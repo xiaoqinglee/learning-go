@@ -11,11 +11,11 @@ func init() {
 	var err error
 	PkgVarToInitForInternalOrExternalUse, err = funcMightReturnErr()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "ch2:init: pkg variable init job failed\n")
+		fmt.Fprintf(os.Stderr, "ch2:init: chapters variable init job failed\n")
 		os.Exit(1)
 	}
 	fmt.Printf(
-		"ch2:init: pkg ch2 variable PkgVarToInitForInternalOrExternalUse init finished: %d\n",
+		"ch2:init: chapters ch2 variable PkgVarToInitForInternalOrExternalUse init finished: %d\n",
 		PkgVarToInitForInternalOrExternalUse)
 
 }
