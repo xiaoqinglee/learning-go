@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/XiaoqingLee/LearningGo/chapters/ch12"
+	"github.com/XiaoqingLee/LearningGo/chapters/ch7"
 )
 
 func main() {
 
-	ch12.ReflectMethods()
+	ch7.TypeSwitch()
 
 }
