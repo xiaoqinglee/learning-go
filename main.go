@@ -1,7 +1,7 @@
 package main
 
 import (
-	bank2 "github.com/XiaoqingLee/LearningGo/chapters/ch9/ch2"
+	bank2 "github.com/XiaoqingLee/LearningGo/chapters/ch9/bank2"
 )
 
 func main() {
