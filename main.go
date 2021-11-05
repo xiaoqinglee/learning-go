@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/XiaoqingLee/LearningGo/chapters/ch8"
+	bank2 "github.com/XiaoqingLee/LearningGo/chapters/ch9/ch2"
 )
 
 func main() {
 
-	ch8.SemaphoreUsingChannelElemAsToken()
+	bank2.UseLocks()
 
 }
