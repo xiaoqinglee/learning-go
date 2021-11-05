@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/XiaoqingLee/LearningGo/chapters/ch7"
+	"github.com/XiaoqingLee/LearningGo/chapters/ch8"
 )
 
 func main() {
 
-	ch7.TypeSwitch()
+	ch8.SemaphoreUsingChannelElemAsToken()
 
 }
