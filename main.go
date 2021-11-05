@@ -6,6 +6,6 @@ import (
 
 func main() {
 
-	supplement.Timer()
+	supplement.Copy()
 
 }
