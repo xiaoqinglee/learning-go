@@ -11,13 +11,13 @@ func RateLimit() {
 
 	type request int
 	requests := make(chan request, 30)
-	for i := 1; i <= 30; i++ {
+	for i := 1; i <= 42; i++ {
 		requests <- request(i)
 	}
 
 	bucketSize := 3
 	tokenBucket := make(chan time.Time, bucketSize)
-	for i := 1; i <= 3; i++ { //开始状态为充满
+	for i := 1; i <= bucketSize; i++ { //开始状态为充满
 		tokenBucket <- time.Now()
 	}
 	go func() {
@@ -28,10 +28,10 @@ func RateLimit() {
 	}()
 
 	var itr int
-	for token_ := range tokenBucket {
+	for token := range tokenBucket {
 		itr += 1
 
-		fmt.Println("token:", token_.Second())
+		fmt.Println("token:", token.Second())
 
 		req := <-requests
 		fmt.Println("request:", req, "now:", time.Now().Second())
