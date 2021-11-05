@@ -1,11 +1,11 @@
 package main
 
 import (
-	bank2 "github.com/XiaoqingLee/LearningGo/chapters/ch9/bank2"
+	"github.com/XiaoqingLee/LearningGo/supplement"
 )
 
 func main() {
 
-	bank2.UseLocks()
+	supplement.Timer()
 
 }
