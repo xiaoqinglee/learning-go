@@ -6,5 +6,5 @@ import (
 
 func main() {
 
-	supplement.HttpClient()
+	supplement.HandleUnixSig()
 }
