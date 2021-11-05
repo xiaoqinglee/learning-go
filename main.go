@@ -6,6 +6,5 @@ import (
 
 func main() {
 
-	supplement.Copy()
-
+	supplement.HttpClient()
 }
