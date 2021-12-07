@@ -5,11 +5,15 @@ import (
 )
 
 //一个type的零值是多少取决于这个type是什么具体类型的别名.
-//如果具体类型是pointer, channel, func, interface, map, or slice type,
+//
+//如果具体类型是interface和引用类型(slice, map, pointer, channel, func),
 //那么这个类型的零值就是nil;
-//如果具体类型是其他类型, 那么零值就是对应类型的零值.
-//struct类型的零值状态是所有字段都为零值的状态, 此时整个struct不是nil,
-//任何时候一个struct实例都不是nil, 尝试用nil给一个struct实例赋值无法通过编译.
+//
+//如果具体类型是基本数据类型, 那么零值就是对应类型的零值,
+//比如 int: 0, float: 0., byte: '\0', rune: '\0', string: "", complex: 0+0i;
+//
+//如果具体类型是复合类型(array, struct), 零值就是所有字段都为零值的状态,
+//任何时候一个复合类型实例都不是nil, 尝试用nil给一个复合类型变量赋值无法通过编译.
 
 //nil is a predeclared identifier representing the zero value for
 //a pointer, channel, func, interface, map, or slice type.
