@@ -95,17 +95,34 @@ func Slice() {
 }
 
 /*
-	go中索引操作的范围为闭区间[0,len(x)-1], 但是切片时允许使用[len(x):]获得一个空切片
-		slice1: []int{}
+	go中索引操作的范围为闭区间[0,len(x)-1],
+	但是切片时允许使用[len(x):]获得尾部一个空切片, 允许使用[:0]获得一个头部的空切片
+		array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
+		slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
+		-----------------
 		slice2: []int{}
-
+		slice3: []int{}
+		slice4: []int{}
+		slice5: []int{}
 */
 func SliceIndex() {
 	array1 := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
-	var slice1 []int = array1[len(array1):]
+	slice1 := array1[:]
+	fmt.Printf("array1: %#v\n", array1)
 	fmt.Printf("slice1: %#v\n", slice1)
-	var slice2 []int = slice1[len(slice1):]
+	fmt.Printf("-----------------\n")
+
+	var slice2 []int = array1[len(array1):]
 	fmt.Printf("slice2: %#v\n", slice2)
+
+	var slice3 []int = slice1[len(slice1):]
+	fmt.Printf("slice3: %#v\n", slice3)
+
+	var slice4 []int = array1[:0]
+	fmt.Printf("slice4: %#v\n", slice4)
+
+	var slice5 []int = slice1[:0]
+	fmt.Printf("slice5: %#v\n", slice5)
 }
 
 /*

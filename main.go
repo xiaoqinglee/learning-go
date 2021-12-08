@@ -6,5 +6,5 @@ import (
 
 func main() {
 
-	ch4.SliceIndex()
+	ch4.DeleteElemAtIndex()
 }
