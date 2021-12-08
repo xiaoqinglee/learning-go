@@ -233,10 +233,23 @@ select{
 		//...
 	case ch3 <- y: //可能会阻塞
 		//...
-	default: //如果存在这个分支, 那么这个分支永远不阻塞
+	default: //如果存在这个分支, 那么这个分支永远不阻塞, 但是当前分支优先级低, 所有case均阻塞时, 这个default后面的内容才会执行
 		//...
 }
 */
+var cancelSignal = make(chan struct{})
+
+//另一个goroutine close cancelSignal通道后, 在当前goroutine内调用cancelled()就可以感知到外部传进来的消息了
+//注意一定要使用close, 而不是向通道推入一个元素,
+//因为多个goroutine都需要使用cancelled()时, 无法保证元素推入数量和消费数量一致从而导致内存泄漏.
+func cancelled() bool {
+	select {
+	case <-cancelSignal:
+		return true
+	default:
+		return false
+	}
+}
 
 func Select() {
 	ch := make(chan int, 1)

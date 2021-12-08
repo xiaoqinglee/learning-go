@@ -83,3 +83,30 @@ func ZeroValue() {
 	//fmt.Printf("*pzz: %#v\n", *pzz) //panic: runtime error: invalid memory address or nil pointer dereference
 	fmt.Println()
 }
+
+//1. nil channel 非常有用:
+//	Given a nil channel c:
+//		<-c receiving from c blocks forever
+//		c <- v sending into c blocks forever
+//		close(c) closing c panics
+//	nil channel 常常用来禁用和激活select语句中的某个case
+//2. make()出来的一个channel的值不是nil, 值为nil的channel是主动赋出来的
+//3. 一个channel的类型不包含有无缓冲这一信息
+
+func NilChannel() {
+	//c == nil: false
+	//c == nil: true
+	//c == nil: false
+	//c == nil: false
+	//pushed.
+	var c = make(chan int)
+	fmt.Printf("c == nil: %v\n", c == nil)
+	c = nil
+	fmt.Printf("c == nil: %v\n", c == nil)
+	c = make(chan int, 42)
+	fmt.Printf("c == nil: %v\n", c == nil)
+	c = make(chan int, 1)
+	fmt.Printf("c == nil: %v\n", c == nil)
+	c <- 100
+	fmt.Printf("pushed.")
+}

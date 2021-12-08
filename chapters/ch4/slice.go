@@ -93,3 +93,62 @@ func Slice() {
 	fmt.Printf("%p -> %v\n", &y, y)
 	fmt.Println()
 }
+
+/*
+	go中索引操作的范围为闭区间[0,len(x)-1], 但是切片时允许使用[len(x):]获得一个空切片
+		slice1: []int{}
+		slice2: []int{}
+
+*/
+func SliceIndex() {
+	array1 := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	var slice1 []int = array1[len(array1):]
+	fmt.Printf("slice1: %#v\n", slice1)
+	var slice2 []int = slice1[len(slice1):]
+	fmt.Printf("slice2: %#v\n", slice2)
+}
+
+/*
+	append 会在原slice变量的底层数组上进行原位操作, 而不是初始化一个新的底层数组.
+		array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
+		slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
+		after deletion:
+		array1: [8]int{0, 1, 2, 4, 5, 6, 7, 7}
+		slice1: []int{0, 1, 2, 4, 5, 6, 7, 7} <slice1已经改变>
+		slice2: []int{0, 1, 2, 4, 5, 6, 7}
+		----------------------------------
+		array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
+		slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
+		after deletion:
+		array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
+		slice1: []int{0, 1, 2, 3, 4, 5, 6, 7} <slice1没有改变>
+		slice2: []int{0, 1, 2, 4, 5, 6, 7}
+*/
+func UnderSlice() {
+	array1 := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	var slice1 []int = array1[:]
+	fmt.Printf("array1: %#v\n", array1)
+	fmt.Printf("slice1: %#v\n", slice1)
+
+	//删除索引为3的元素
+	var slice2 []int = append(slice1[:3], slice1[3+1:]...)
+	fmt.Printf("after deletion:\n")
+	fmt.Printf("array1: %#v\n", array1)
+	fmt.Printf("slice1: %#v\n", slice1)
+	fmt.Printf("slice2: %#v\n", slice2)
+	fmt.Printf("----------------------------------\n")
+
+	array1 = [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	slice1 = array1[:]
+	fmt.Printf("array1: %#v\n", array1)
+	fmt.Printf("slice1: %#v\n", slice1)
+
+	//避免原位操作的方式
+	slice2 = make([]int, len(slice1), cap(slice1))
+	copy(slice2, slice1)
+	slice2 = append(slice2[:3], slice2[3+1:]...)
+	fmt.Printf("after deletion:\n")
+	fmt.Printf("array1: %#v\n", array1)
+	fmt.Printf("slice1: %#v\n", slice1)
+	fmt.Printf("slice2: %#v\n", slice2)
+}

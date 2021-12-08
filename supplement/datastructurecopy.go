@@ -24,7 +24,7 @@ func Copy() {
 
 	//copy slice
 	slice1 := []int{11, 22, 33, 44, 55}
-	slice2 := make([]int, len(slice1))
+	slice2 := make([]int, len(slice1), cap(slice1))
 	copy(slice2, slice1)
 	fmt.Printf("slice1: %p, value: %#v\n", &slice1, slice1)
 	fmt.Printf("slice2: %p, value: %#v\n", &slice2, slice2)

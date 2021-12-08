@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/XiaoqingLee/LearningGo/supplement"
+	"github.com/XiaoqingLee/LearningGo/chapters/ch4"
 )
 
 func main() {
 
-	supplement.HandleUnixSig()
+	ch4.SliceIndex()
 }
