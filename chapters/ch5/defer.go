@@ -61,3 +61,19 @@ returnedValue: 22
 
 Process finished with the exit code 0
 */
+
+//defer陷阱
+func FuncDeferFoo() (returnedValue int) { //返回1
+	defer func() {
+		returnedValue = 1
+	}()
+	return returnedValue
+}
+
+func FuncDeferBar() int { //返回0, 因为返回值列表并没有使用变量名, 所以最终返回的是在执行defer调用之前就已经计算完毕的return语句后面的操作数的值
+	returnedValue := 0
+	defer func() {
+		returnedValue = 1
+	}()
+	return returnedValue
+}
