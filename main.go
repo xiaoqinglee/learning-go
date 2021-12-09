@@ -6,5 +6,5 @@ import (
 
 func main() {
 
-	ch4.ModifyMapInRightWay()
+	ch4.TestSliceAssignment()
 }

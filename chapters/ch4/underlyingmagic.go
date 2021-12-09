@@ -81,24 +81,38 @@ func GetSliceUnderlyingArrayAddress(slice []int) unsafe.Pointer {
 /*
 	共享底层数组:
 	slice1: []int{0, 11, 2}, slice2: []int{0, 11, 2}
-	slice1 underlying array's address: (unsafe.Pointer)(0xc000012138)
-	slice2 underlying array's address: (unsafe.Pointer)(0xc000012138)
+	slice1 underlying array's address: (unsafe.Pointer)(0xc0000ae090)
+	slice2 underlying array's address: (unsafe.Pointer)(0xc0000ae090)
 	--------------------------------------------------------------
 	共享底层数组:
 	array1: [3]int{0, 11, 2}, slice1: []int{0, 11, 2}, slice2: []int{0, 11, 2}
-	array1's address: 0xc000012150
-	slice1 underlying array's address: (unsafe.Pointer)(0xc000012150)
-	slice2 underlying array's address: (unsafe.Pointer)(0xc000012150)
+	array1's address: 0xc0000ae0a8
+	slice1 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
+	slice2 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
 	--------------------------------------------------------------
-	append beyond array border 导致 slice1 自立门户:
-	array1: [3]int{0, 1, 2}, slice1: []int{0, 1, 2, 3}, slice2: []int{0, 1, 2}
-	array1's address: 0xc000012150
-	slice1 underlying array's address: (unsafe.Pointer)(0xc00000c3f0)
-	slice2 underlying array's address: (unsafe.Pointer)(0xc000012150)
-	array1: [3]int{0, 1, 2}, slice1: []int{0, 11, 2, 3}, slice2: []int{0, 1, 2}
-	array1's address: 0xc000012150
-	slice1 underlying array's address: (unsafe.Pointer)(0xc00000c3f0)
-	slice2 underlying array's address: (unsafe.Pointer)(0xc000012150)
+	append 操作没有在底层数组上发生越界, 所以 slice1 slice2 仍然继续共享底层数组:
+	array1: [3]int{0, 1, 2}, slice1: []int{0, 1}, slice2: []int{0, 1, 2}
+	array1's address: 0xc0000ae0a8
+	slice1 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
+	slice2 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
+	array1: [3]int{0, 1, 22}, slice1: []int{0, 1, 22}, slice2: []int{0, 1, 22}
+	array1's address: 0xc0000ae0a8
+	slice1 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
+	slice2 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
+	--------------------------------------------------------------
+	append 操作超出了底层数组的边界, 所以 slice1 的底层数组自立门户:
+	array1: [3]int{0, 1, 2}, slice1: []int{0, 1}, slice2: []int{0, 1, 2}
+	array1's address: 0xc0000ae0a8
+	slice1 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
+	slice2 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
+	array1: [3]int{0, 1, 2}, slice1: []int{0, 1, 22, 33}, slice2: []int{0, 1, 2}
+	array1's address: 0xc0000ae0a8
+	slice1 underlying array's address: (unsafe.Pointer)(0xc0000cc060)
+	slice2 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
+	array1: [3]int{42, 1, 2}, slice1: []int{0, 1, 22, 33}, slice2: []int{42, 1, 2}
+	array1's address: 0xc0000ae0a8
+	slice1 underlying array's address: (unsafe.Pointer)(0xc0000cc060)
+	slice2 underlying array's address: (unsafe.Pointer)(0xc0000ae0a8)
 	--------------------------------------------------------------
 */
 func TestSliceAssignment() {
@@ -122,16 +136,41 @@ func TestSliceAssignment() {
 	fmt.Printf("slice2 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice2))
 	fmt.Printf("--------------------------------------------------------------\n")
 
-	fmt.Printf("append beyond array border 导致 slice1 自立门户:\n")
+	fmt.Printf("append 操作没有在底层数组上发生越界, 所以 slice1 slice2 仍然继续共享底层数组:\n")
 	array1 = [...]int{0, 1, 2}
-	slice1 = array1[:]
-	slice2 = slice1
-	slice1 = append(slice1, 3)
+	slice1 = array1[:2] // 0, 1
+	slice2 = array1[:]  // 0, 1, 2
 	fmt.Printf("array1: %#v, slice1: %#v, slice2: %#v\n", array1, slice1, slice2)
 	fmt.Printf("array1's address: %p\n", &array1)
 	fmt.Printf("slice1 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice1))
 	fmt.Printf("slice2 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice2))
-	slice1[1] = 11
+	slice1 = append(slice1, 22)
+	fmt.Printf("array1: %#v, slice1: %#v, slice2: %#v\n", array1, slice1, slice2)
+	fmt.Printf("array1's address: %p\n", &array1)
+	fmt.Printf("slice1 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice1))
+	fmt.Printf("slice2 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice2))
+	fmt.Printf("--------------------------------------------------------------\n")
+
+	fmt.Printf("append 操作超出了底层数组的边界, 所以 slice1 的底层数组自立门户:\n")
+	array1 = [...]int{0, 1, 2}
+	slice1 = array1[:2] // 0, 1
+	slice2 = array1[:]  // 0, 1, 2
+	fmt.Printf("array1: %#v, slice1: %#v, slice2: %#v\n", array1, slice1, slice2)
+	fmt.Printf("array1's address: %p\n", &array1)
+	fmt.Printf("slice1 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice1))
+	fmt.Printf("slice2 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice2))
+
+	//因为最终array1的最终结果为[3]int{0, 1, 2}, 而不是[3]int{0, 1, 22}
+	//所以我们可以知道append函数会先计算append动作结束后底层数组右边界是否有越界从而决定是否新开辟底层数组,
+	//然后开始追加所有元素.
+	//而不是将多个elem逐一append到旧的底层数组边追加边检测是否越界.
+	slice1 = append(slice1, 22, 33)
+	fmt.Printf("array1: %#v, slice1: %#v, slice2: %#v\n", array1, slice1, slice2)
+	fmt.Printf("array1's address: %p\n", &array1)
+	fmt.Printf("slice1 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice1))
+	fmt.Printf("slice2 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice2))
+
+	array1[0] = 42 //再次检查
 	fmt.Printf("array1: %#v, slice1: %#v, slice2: %#v\n", array1, slice1, slice2)
 	fmt.Printf("array1's address: %p\n", &array1)
 	fmt.Printf("slice1 underlying array's address: %#v\n", GetSliceUnderlyingArrayAddress(slice1))
