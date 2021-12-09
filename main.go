@@ -1,8 +1,10 @@
 package main
 
-import "github.com/XiaoqingLee/LearningGo/supplement"
+import (
+	"github.com/XiaoqingLee/LearningGo/chapters/ch4"
+)
 
 func main() {
 
-	supplement.TestValueContext()
+	ch4.ModifyMapInRightWay()
 }

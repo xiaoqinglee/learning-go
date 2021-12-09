@@ -32,11 +32,8 @@ func modifyMap(m map[int]string) {
 	outside: 3. []int{0, 1, 2, 3, 42}
 	[]int{0, 1, 2, 3, 42, 84}
 	outside: 4. []int{0, 1, 2, 3, 42, 84}
-	--------------------
-	outside: 1. map[int]string{}
-	outside: 2. map[int]string{42:"42"}
 */
-func ModifySliceAndMap() {
+func ModifySlice() {
 	sliceVar := []int{0, 1, 2, 3}
 	fmt.Printf("outside: 1. %#v\n", sliceVar)
 	modifySliceInWrongWay(sliceVar)
@@ -45,12 +42,6 @@ func ModifySliceAndMap() {
 	fmt.Printf("outside: 3. %#v\n", sliceVar)
 	modifySliceInRightWay2(&sliceVar)
 	fmt.Printf("outside: 4. %#v\n", sliceVar)
-	fmt.Printf("--------------------\n")
-
-	mapVar := make(map[int]string)
-	fmt.Printf("outside: 1. %#v\n", mapVar)
-	modifyMap(mapVar)
-	fmt.Printf("outside: 2. %#v\n", mapVar)
 }
 
 //order matters
