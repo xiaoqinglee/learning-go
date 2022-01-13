@@ -1,10 +1,9 @@
 package main
 
-import "github.com/XiaoqingLee/LearningGo/chapters/ch5"
+import "github.com/XiaoqingLee/LearningGo/chapters/ch8"
 
 func main() {
 
-	//ch4.TestSliceAssignment()
-	println(ch5.FuncDeferFoo())
-	println(ch5.FuncDeferBar())
+	ch8.LaunchRocket1()
+
 }

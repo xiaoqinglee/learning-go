@@ -272,15 +272,13 @@ func LaunchRocket1() {
 	}()
 
 	var timerChan <-chan time.Time = time.After(10 * time.Second) //从此句开始计时
-	for {
-		select {
-		case <-timerChan:
-			fmt.Printf("lanch!\n")
-			return
-		case <-abort:
-			fmt.Printf("lanch abort.\n")
-			return
-		}
+	select {
+	case <-timerChan:
+		fmt.Printf("lanch!\n")
+		return
+	case <-abort:
+		fmt.Printf("lanch abort.\n")
+		return
 	}
 }
 
