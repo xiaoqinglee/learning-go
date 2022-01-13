@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/XiaoqingLee/LearningGo/gotcha"
+	"github.com/XiaoqingLee/LearningGo/chapters/ch6"
 )
 
 func main() {
-	gotcha.UseIota()
+	ch6.NilChannel()
 }

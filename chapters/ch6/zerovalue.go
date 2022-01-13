@@ -92,7 +92,9 @@ func ZeroValue() {
 		c <- v sending into c blocks forever
 		close(c) closing c panics
 	nil channel 常常用来禁用和激活select语句中的某个case
-2. make()出来的一个channel的值不是nil, 值为nil的channel是主动赋出来的
+2. 向一个 channel 变量直接赋值 nil 可以得到 nil channel;
+	var varName chan 得到的 channel 变量, 它的值是 nil;
+	make() 出来的一个 channel 变量, 它的值不是 nil.
 3. 一个channel的类型不包含有无缓冲这一信息
 
 ch := make(chan int, 5)
@@ -105,7 +107,10 @@ func NilChannel() {
 	//c == nil: true
 	//c == nil: false
 	//c == nil: false
-	//pushed.
+	//
+	//c2 == nil: true
+	//c2 == nil: false
+
 	var c = make(chan int)
 	fmt.Printf("c == nil: %v\n", c == nil)
 	c = nil
@@ -114,6 +119,10 @@ func NilChannel() {
 	fmt.Printf("c == nil: %v\n", c == nil)
 	c = make(chan int, 1)
 	fmt.Printf("c == nil: %v\n", c == nil)
-	c <- 100
-	fmt.Printf("pushed.")
+	fmt.Println()
+
+	var c2 chan int
+	fmt.Printf("c2 == nil: %v\n", c2 == nil)
+	c2 = make(chan int, 42)
+	fmt.Printf("c2 == nil: %v\n", c2 == nil)
 }
