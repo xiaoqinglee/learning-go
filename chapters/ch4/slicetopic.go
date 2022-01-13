@@ -185,3 +185,25 @@ func UnderSliceAppend() {
 	fmt.Printf("slice1: %#v\n", slice1)
 	fmt.Printf("slice2: %#v\n", slice2)
 }
+
+/**
+切片高级语法: sliceFoo[lowIndex:highIndex:maxIndex]
+
+对于 sliceFoo[lowIndex:highIndex]
+lowIndex <= highIndex <= len(sliceFoo)
+
+sliceFoo[lowIndex:highIndex] 等价于
+sliceFoo[lowIndex:highIndex:cap(sliceFoo)]
+
+对于 sliceFoo[lowIndex:highIndex:maxIndex]
+lowIndex <= highIndex <= maxIndex <= cap(sliceFoo)
+*/
+
+func AdvancedSlice() {
+	numbers := [10]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	var s1, s2 []int
+	s1 = numbers[1:4]
+	fmt.Printf("len:  %v, cap: %v\n", len(s1), cap(s1)) //len:  3, cap: 9
+	s2 = numbers[1:4:4]
+	fmt.Printf("len:  %v, cap: %v\n", len(s2), cap(s2)) //len:  3, cap: 3
+}

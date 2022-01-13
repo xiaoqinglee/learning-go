@@ -1,9 +1,9 @@
 package main
 
-import "github.com/XiaoqingLee/LearningGo/chapters/ch8"
+import (
+	"github.com/XiaoqingLee/LearningGo/gotcha"
+)
 
 func main() {
-
-	ch8.LaunchRocket1()
-
+	gotcha.UseIota()
 }
