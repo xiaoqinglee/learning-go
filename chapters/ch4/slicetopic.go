@@ -18,9 +18,6 @@ func modifySliceInRightWay2(sliceStructPointerReplica *[]int) {
 	fmt.Printf("%#v\n", *sliceStructPointerReplica)
 	return
 }
-func modifyMap(m map[int]string) {
-	m[42] = "42"
-}
 
 /*
 	outside: 1. []int{0, 1, 2, 3}

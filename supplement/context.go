@@ -107,6 +107,8 @@ func TestValueContext() {
 
 	childGoroutine := func(ctx context.Context, wg *sync.WaitGroup) {
 		defer wg.Done()
+		// Value(key interface{}) interface{}
+		// 可以给context设置一些值，使用方法和map类似，key需要支持==比较操作，value需要是并发安全的
 		traceId, ok := ctx.Value("parentGoroutineId").(string)
 		if ok {
 			fmt.Printf("parentGoroutineId %v.\n", traceId)
@@ -121,7 +123,7 @@ func TestValueContext() {
 	wg.Add(1)
 	go childGoroutine(ctx, wg)
 
-	// 程序员有义务让 val interface{} 在自己编写的代码中互斥地使用或者使用并发安全的数据类型
+	// 程序员有义务让 value 在自己编写的代码中互斥地使用或者使用并发安全的数据类型
 	ctxWithValue := context.WithValue(ctx, "parentGoroutineId", "idFoo")
 	wg.Add(1)
 	go childGoroutine(ctxWithValue, wg)

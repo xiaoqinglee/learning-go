@@ -10,7 +10,7 @@ import (
 	ref https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-make-and-new/
 
 	当我们想要在 Go 语言中初始化一个结构时，可能会用到两个不同的关键字 — make 和 new。因为它们的功能相似，
-	所以初学者可能会对这两个关键字的作用感到困惑1，但是它们两者能够初始化的变量却有较大的不同。
+	所以初学者可能会对这两个关键字的作用感到困惑，但是它们两者能够初始化的变量却有较大的不同。
 
 	make 的作用是初始化内置的数据结构，也就是我们在前面提到的切片、哈希表和 Channel；
 	new 的作用是根据传入的类型分配一片内存空间并返回指向这片内存空间的指针；
@@ -179,6 +179,10 @@ func TestSliceAssignment() {
 
 }
 
+func AddOrDeleteMapElem(m map[int]string) {
+	m[42] = "42"
+}
+
 /*
 	outside: m value: map[42:42]
 	outside: m as pointer: 0xc00007a480 &m: 0xc000006028
@@ -218,7 +222,7 @@ func ModifyMapInWrongWay() {
 	outside: m as pointer: 0xc00007a510 &m: 0xc000006028
 
 */
-func ModifyMapInRightWay() { //inside outside &m一样.
+func ModifyMapInRightWay1() { //inside outside &m一样.
 	m := make(map[int]string)
 	m[42] = "42"
 	fmt.Printf("outside: m value: %v\n", m)
@@ -230,6 +234,33 @@ func ModifyMapInRightWay() { //inside outside &m一样.
 		fmt.Printf("inside: m value: %v\n", *pm)
 		fmt.Printf("inside: m as pointer: %p &m: %p\n", *pm, pm)
 	}(&m)
+	fmt.Printf("outside: m value: %v\n", m)
+	fmt.Printf("outside: m as pointer: %p &m: %p\n", m, &m)
+}
+
+/*
+	outside: m value: map[42:42]
+	outside: m as pointer: 0xc0000c2450 &m: 0xc0000ce018
+	inside: m value: map[42:42]
+	inside: m as pointer: 0xc0000c2450 &m: 0xc0000ce028
+	inside: m value: map[]
+	inside: m as pointer: 0xc0000c24e0 &m: 0xc0000ce028
+	outside: m value: map[]
+	outside: m as pointer: 0xc0000c24e0 &m: 0xc0000ce018
+*/
+func ModifyMapInRightWay2() { //inside outside &m不一样
+	m := make(map[int]string)
+	m[42] = "42"
+	fmt.Printf("outside: m value: %v\n", m)
+	fmt.Printf("outside: m as pointer: %p &m: %p\n", m, &m)
+	m = func(m map[int]string) map[int]string {
+		fmt.Printf("inside: m value: %v\n", m)
+		fmt.Printf("inside: m as pointer: %p &m: %p\n", m, &m)
+		m = make(map[int]string)
+		fmt.Printf("inside: m value: %v\n", m)
+		fmt.Printf("inside: m as pointer: %p &m: %p\n", m, &m)
+		return m
+	}(m)
 	fmt.Printf("outside: m value: %v\n", m)
 	fmt.Printf("outside: m as pointer: %p &m: %p\n", m, &m)
 }

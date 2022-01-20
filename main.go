@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/XiaoqingLee/LearningGo/chapters/ch6"
+	"github.com/XiaoqingLee/LearningGo/chapters/ch4"
 )
 
 func main() {
-	ch6.NilChannel()
+	ch4.Slice()
 }
