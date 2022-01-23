@@ -1,9 +1,7 @@
 package main
 
-import (
-	"github.com/XiaoqingLee/LearningGo/chapters/ch4"
-)
+import "github.com/XiaoqingLee/LearningGo/supplement"
 
 func main() {
-	ch4.Slice()
+	supplement.TestTimeoutContext()
 }
