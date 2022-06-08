@@ -176,24 +176,3 @@ func Const() {
 	fmt.Printf("[]Exp{two, four, eight, sixteen}: %v\n", []Exp{two, four, eight, sixteen})
 	fmt.Println()
 }
-
-func TestVarInitialization() {
-	//<nil>
-	//true
-	//{}
-	//true
-	//[]
-	//true
-	//[42]
-	var p *string
-	var s struct{}
-	var slice []int
-	fmt.Printf("%v\n", p)
-	fmt.Printf("%v\n", p == nil)
-	fmt.Printf("%v\n", s)
-	fmt.Printf("%v\n", s == struct{}{})
-	fmt.Printf("%v\n", slice)
-	fmt.Printf("%v\n", len(slice) == 0)
-	slice = append(slice, 42)
-	fmt.Printf("%v\n", slice)
-}

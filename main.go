@@ -1,7 +1,9 @@
 package main
 
-import "github.com/XiaoqingLee/LearningGo/supplement"
+import (
+	"github.com/XiaoqingLee/LearningGo/chapters/ch6"
+)
 
 func main() {
-	supplement.TestTimeoutContext()
+	ch6.TestVarInitialization()
 }

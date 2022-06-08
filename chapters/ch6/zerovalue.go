@@ -19,6 +19,13 @@ import (
 //a pointer, channel, func, interface, map, or slice type.
 //Type must be a pointer, channel, func, interface, map, or slice type.
 
+//对于slice, map和channel：
+//使用var初始化时，三者都是nil值。
+//使用make()方式初始化时，三者都是非nil。
+//	nil slice 可直接拿来用。
+//	nil map 不能直接使用，会panic。
+//	nil channel 可以直接使用，但是send和receive操作会永远阻塞。
+
 type AliasOfASlice []int
 
 type AliasOfAStruct struct {
@@ -93,7 +100,7 @@ func ZeroValue() {
 		close(c) closing c panics
 	nil channel 常常用来禁用和激活select语句中的某个case
 2. 向一个 channel 变量直接赋值 nil 可以得到 nil channel;
-	var varName chan 得到的 channel 变量, 它的值是 nil;
+	var varName chan 得到的 channel 变量, 它的值也是 nil;
 	make() 出来的一个 channel 变量, 它的值不是 nil.
 3. 一个channel的类型不包含有无缓冲这一信息
 
@@ -125,4 +132,138 @@ func NilChannel() {
 	fmt.Printf("c2 == nil: %v\n", c2 == nil)
 	c2 = make(chan int, 42)
 	fmt.Printf("c2 == nil: %v\n", c2 == nil)
+}
+
+func TestVarInitialization() {
+
+	//var struct_ struct{}========================================================
+	//struct_: {}
+	//struct_ == struct{}{}: true
+	fmt.Println("var struct_ struct{}========================================================")
+	var struct_ struct{}
+	fmt.Printf("struct_: %v\n", struct_)
+	fmt.Printf("struct_ == struct{}{}: %v\n", struct_ == struct{}{})
+
+	//var pointer *string========================================================
+	//pointer: <nil>
+	//pointer == nil: true
+	fmt.Println("var pointer *string========================================================")
+	var pointer *string
+	fmt.Printf("pointer: %v\n", pointer)
+	fmt.Printf("pointer == nil: %v\n", pointer == nil)
+
+	//var slice1 []int========================================================
+	//slice1: []
+	//slice1 == nil: true
+	//len(slice1) == 0：true
+	//after appending
+	//slice1: [42]
+	//slice1 == nil: false
+	//len(slice1) == 0：false
+	fmt.Println("var slice1 []int========================================================")
+	var slice1 []int
+	fmt.Printf("slice1: %v\n", slice1)
+	fmt.Printf("slice1 == nil: %v\n", slice1 == nil)
+	fmt.Printf("len(slice1) == 0：%v\n", len(slice1) == 0)
+	slice1 = append(slice1, 42)
+	fmt.Printf("after appending\n")
+	fmt.Printf("slice1: %v\n", slice1)
+	fmt.Printf("slice1 == nil: %v\n", slice1 == nil)
+	fmt.Printf("len(slice1) == 0：%v\n", len(slice1) == 0)
+
+	//slice2 := make([]int, 0)--------------------------------------------------------
+	//slice2: []
+	//slice2 == nil: false
+	//len(slice2) == 0：true
+	//after appending
+	//slice2: [42]
+	//slice2 == nil: false
+	//len(slice2) == 0：false
+	fmt.Println("slice2 := make([]int, 0)--------------------------------------------------------")
+	slice2 := make([]int, 0)
+	fmt.Printf("slice2: %v\n", slice2)
+	fmt.Printf("slice2 == nil: %v\n", slice2 == nil)
+	fmt.Printf("len(slice2) == 0：%v\n", len(slice2) == 0)
+	slice2 = append(slice2, 42)
+	fmt.Printf("after appending\n")
+	fmt.Printf("slice2: %v\n", slice2)
+	fmt.Printf("slice2 == nil: %v\n", slice2 == nil)
+	fmt.Printf("len(slice2) == 0：%v\n", len(slice2) == 0)
+
+	//var map_1 map[int]int========================================================
+	//map_1: map[]
+	//map_1 == nil: true
+	//len(map_1) == 0：true
+	//panic: assignment to entry in nil map
+	fmt.Println("var map_1 map[int]int========================================================")
+	var map_1 map[int]int
+	fmt.Printf("map_1: %v\n", map_1)
+	fmt.Printf("map_1 == nil: %v\n", map_1 == nil)
+	fmt.Printf("len(map_1) == 0：%v\n", len(map_1) == 0)
+	//map_1[42] = 42
+
+	//map_2 := make(map[int]int)--------------------------------------------------------
+	//map_2: map[]
+	//map_2 == nil: false
+	//len(map_2) == 0：true
+	//after appending
+	//map_2: map[42:42]
+	//map_2 == nil: false
+	//len(map_2) == 0：false
+	fmt.Println("map_2 := make(map[int]int)--------------------------------------------------------")
+	map_2 := make(map[int]int)
+	fmt.Printf("map_2: %v\n", map_2)
+	fmt.Printf("map_2 == nil: %v\n", map_2 == nil)
+	fmt.Printf("len(map_2) == 0：%v\n", len(map_2) == 0)
+	map_2[42] = 42
+	fmt.Printf("after appending\n")
+	fmt.Printf("map_2: %v\n", map_2)
+	fmt.Printf("map_2 == nil: %v\n", map_2 == nil)
+	fmt.Printf("len(map_2) == 0：%v\n", len(map_2) == 0)
+
+	//var chan1 chan int========================================================
+	//chan1: <nil>
+	//chan1 == nil: true
+	//len(chan1) == 0：true
+	//waiting for receiving
+	//fatal error: all goroutines are asleep - deadlock!
+	//
+	//goroutine 1 [chan send (nil chan)]...
+	fmt.Println("var chan1 chan int========================================================")
+	var chan1 chan int
+	fmt.Printf("chan1: %v\n", chan1)
+	fmt.Printf("chan1 == nil: %v\n", chan1 == nil)
+	fmt.Printf("len(chan1) == 0：%v\n", len(chan1) == 0)
+	//go func() {
+	//	fmt.Println("waiting for receiving")
+	//	<-chan1
+	//	fmt.Println("receiving done")
+	//}()
+	//chan1 <- 42
+
+	//chan2 := make(chan int, 0)--------------------------------------------------------
+	//chan2: 0xc000052120
+	//chan2 == nil: false
+	//len(chan2) == 0：true
+	//waiting for receiving
+	//receiving done
+	//after appending
+	//chan2: 0xc000052120
+	//chan2 == nil: false
+	//len(chan2) == 0：true
+	fmt.Println("chan2 := make(chan int, 0)--------------------------------------------------------")
+	chan2 := make(chan int, 0)
+	fmt.Printf("chan2: %v\n", chan2)
+	fmt.Printf("chan2 == nil: %v\n", chan2 == nil)
+	fmt.Printf("len(chan2) == 0：%v\n", len(chan2) == 0)
+	go func() {
+		fmt.Println("waiting for receiving")
+		<-chan2
+		fmt.Println("receiving done")
+	}()
+	chan2 <- 42
+	fmt.Printf("after appending\n")
+	fmt.Printf("chan2: %v\n", chan2)
+	fmt.Printf("chan2 == nil: %v\n", chan2 == nil)
+	fmt.Printf("len(chan2) == 0：%v\n", len(chan2) == 0)
 }
