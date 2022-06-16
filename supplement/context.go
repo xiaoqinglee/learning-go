@@ -159,3 +159,19 @@ func TestTimeoutContext() { //可以超时自动取消, 也可以在自动取消
 
 func TestValueContext() {
 }
+
+//	Soham Kamani 讲解:
+//	https://www.sohamkamani.com/golang/context-cancellation-and-values/
+//
+//	golang blog pipeline:
+//	https://go.dev/blog/pipelines
+//
+//										   ┌───────────close()─────────┐
+//		 ┌───────────────────────close()───│───────────────────────────│
+//		 ↓                                 ↓                           │
+//	sq(done) ────────(in)────────> merge(done) ────────(out)────────> main
+//	│                 ↑              │                   ↑
+//	└─────close()─────┘              └──────close()──────┘
+//
+//	goroutine: sq, merge, main
+//	chan: in, out, done (都是无缓冲的)
