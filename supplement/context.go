@@ -165,13 +165,14 @@ func TestValueContext() {
 //
 //	golang blog pipeline:
 //	https://go.dev/blog/pipelines
+//`
+//                                           ┌───────────close()─────────┐
+//         ┌───────────────────────close()───│───────────────────────────│
+//         ↓                                 ↓                           │
+//    sq(done) ────────(in)────────> merge(done) ────────(out)────────> main
+//    │                 ↑              │                   ↑
+//    └─────close()─────┘              └──────close()──────┘
 //
-//										   ┌───────────close()─────────┐
-//		 ┌───────────────────────close()───│───────────────────────────│
-//		 ↓                                 ↓                           │
-//	sq(done) ────────(in)────────> merge(done) ────────(out)────────> main
-//	│                 ↑              │                   ↑
-//	└─────close()─────┘              └──────close()──────┘
-//
+//`
 //	goroutine: sq, merge, main
 //	chan: in, out, done (都是无缓冲的)
