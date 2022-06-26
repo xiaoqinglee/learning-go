@@ -43,19 +43,19 @@ func Defer() {
 }
 
 /*
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:37 github.com/XiaoqingLee/LearningGo/chapters/ch5.Defer
+calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:37 github.com/xiaoqingLee/learning-go/chapters/ch5.Defer
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:27 github.com/XiaoqingLee/LearningGo/chapters/ch5.FunctionContainingDefer
+calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:27 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:22 github.com/XiaoqingLee/LearningGo/chapters/ch5.deferFuncParam
+calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:22 github.com/xiaoqingLee/learning-go/chapters/ch5.deferFuncParam
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:32 github.com/XiaoqingLee/LearningGo/chapters/ch5.FunctionContainingDefer
+calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:32 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:17 github.com/XiaoqingLee/LearningGo/chapters/ch5.returnOperator
+calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:17 github.com/xiaoqingLee/learning-go/chapters/ch5.returnOperator
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:30 github.com/XiaoqingLee/LearningGo/chapters/ch5.FunctionContainingDefer.func1
+calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:30 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer.func1
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:39 github.com/XiaoqingLee/LearningGo/chapters/ch5.Defer
+calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:39 github.com/xiaoqingLee/learning-go/chapters/ch5.Defer
 
 returnedValue: 22
 
