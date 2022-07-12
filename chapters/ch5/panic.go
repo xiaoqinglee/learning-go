@@ -12,7 +12,7 @@ func FunctionMightPanic() {
 	rand.Seed(time.Now().UnixNano())
 	switch randomInt := rand.Intn(3); randomInt { //0, 1, 2
 	case 0:
-		return
+		//do nothing
 	case 1:
 		panic(expectedPanic{})
 	default:
@@ -20,7 +20,7 @@ func FunctionMightPanic() {
 	}
 }
 
-func HandlePanic() (result int, err error) { //error类型的零值为nil
+func HandlePanic() (result int, err error) { //error类型的零值为nil //恢复产生自子调用的panic
 	//选择性地从错误中恢复
 	defer func() {
 		switch panicValue := recover(); panicValue {
@@ -28,19 +28,53 @@ func HandlePanic() (result int, err error) { //error类型的零值为nil
 			fmt.Printf("未发生panic\n")
 		case expectedPanic{}:
 			fmt.Printf("发生了预期的panic\n")
-			err = fmt.Errorf("HandlePanic: xxx") //e.g. 元素不存在
+			result, err = 0, fmt.Errorf("HandlePanic: xxx") //e.g. 元素不存在
 		default:
 			fmt.Printf("发生了未知的panic\n")
 			panic(panicValue)
 		}
 	}()
 	FunctionMightPanic()
-	result = 42
+	result, err = 42, nil
 	return
 }
 
-func Panic() {
+func HandlePanic2() (result int, err error) { //恢复产生自自己的panic, recover()有这个能力, 只是没这个必要, 因为当前函数知道自己会产生哪些panic, 而且能改自己的代码, 不像调用一个外部的库函数
+	defer func() {
+		switch panicValue := recover(); panicValue {
+		case nil:
+			fmt.Printf("未发生panic\n")
+		case expectedPanic{}:
+			fmt.Printf("发生了预期的panic\n")
+			result, err = 0, fmt.Errorf("HandlePanic: xxx")
+		default:
+			fmt.Printf("发生了未知的panic\n")
+			panic(panicValue)
+		}
+	}()
+	rand.Seed(time.Now().UnixNano())
+	switch randomInt := rand.Intn(3); randomInt { //0, 1, 2
+	case 0:
+		//do nothing
+	case 1:
+		panic(expectedPanic{})
+	default:
+		panic("unknown panic")
+	}
+	result, err = 42, nil
+	return
+}
+
+func TestPanic() {
 	result, err := HandlePanic()
+	if err != nil {
+		fmt.Printf("error:Panic:%s\n", err.Error())
+		return
+	}
+	fmt.Printf("result: %d\n", result)
+}
+func TestPanic2() {
+	result, err := HandlePanic2()
 	if err != nil {
 		fmt.Printf("error:Panic:%s\n", err.Error())
 		return

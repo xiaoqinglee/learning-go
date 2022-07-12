@@ -1,6 +1,9 @@
 package main
 
-import "github.com/davecgh/go-spew/spew"
+import (
+	"github.com/davecgh/go-spew/spew"
+	"github.com/xiaoqingLee/learning-go/chapters/ch5"
+)
 
 func main() {
 	//array1 := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
@@ -12,4 +15,5 @@ func main() {
 	//fmt.Printf("array1: %#v\n", array1[0:0])
 
 	spew.Dump(42)
+	ch5.TestPanic()
 }
