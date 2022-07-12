@@ -70,7 +70,15 @@ func bareReturn() (returnedValue int) { //返回 1
 
 func bareReturn2() (returnedValue int) { //返回 42
 	returnedValue = 1
-	return 42 //使用bare return的函数return语句后面如果有值, 那么这个值不会被忽略!
+	return 42 //使用bare return的函数如果在return语句后面有值, 那么会发生赋值动作
+}
+
+func bareReturn3() (returnedValue int) { //我们可以在defer中验证 return xx 导致的赋值
+	defer func() {
+		fmt.Printf("In defer, returnedValue: %v\n", returnedValue) //In defer, returnedValue: 42
+	}()
+	returnedValue = 1
+	return 42
 }
 
 func ReturnAndDefer() (returnedValue int) { //返回 1
@@ -105,6 +113,7 @@ func ReturnAndDefer4() (returnedValue int) { //返回 1
 func TestReturnAndDefer() {
 	fmt.Println(bareReturn())
 	fmt.Println(bareReturn2())
+	fmt.Println(bareReturn3())
 	fmt.Println(ReturnAndDefer())
 	fmt.Println(ReturnAndDefer2())
 	fmt.Println(ReturnAndDefer3())

@@ -14,11 +14,15 @@ func sumB(x int, y int) int {
 func sumC(x, y int) (z int) {
 	z = x + y
 	//如果不写return会发生 Missing the 'return' statement at the end of the function.
-	//如果有返回值, 那么必须有return语句, 空return也行, 不写不行.
+	//如果函数有返回值, 那么必须有return语句, 空return也行, 不写不行.
 	//另外 return != return nil,
-	//如果返回值列表中只有一个变量且nil和该变量类型适配, 那么nil会重写return之前对返回值列表变量的赋值
-	//see bareReturn()
+	//return nil 会执行 z = nil
+	//see bareReturn() 相关测试
 	return
+}
+
+func TestSumC() {
+	sumC(1, 2)
 }
 func ignoreSecondParam(x, _ int) int {
 	return x
