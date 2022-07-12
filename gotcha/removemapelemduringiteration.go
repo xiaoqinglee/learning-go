@@ -1,6 +1,11 @@
 package gotcha
 
 /**
+不论那种语言(除了rust外), 在迭代一个容器时添加或删除元素都是非常危险的动作,
+因为这些动作改变了容器的大小可能会让该容器重新被分配地址, 造成之前地址不可用.
+
+目前阶段在迭代 golang 的 map 时添加或删除元素是安全的, 不代表在未来的实现中仍然是这样.
+使用非公开的 api 不会获得质量承诺.
 
 Is it safe to remove selected keys from map within a range loop?
 

@@ -10,8 +10,9 @@ func AtomicAdd() {
 	var op int64
 	var op2 int
 	var wg sync.WaitGroup
-	for i := 0; i < 10000; i++ {
-		wg.Add(1)
+	nGoroutines := 10000
+	wg.Add(nGoroutines)
+	for i := 0; i < nGoroutines; i++ {
 		go func() {
 			defer wg.Done()
 			atomic.AddInt64(&op, 1)

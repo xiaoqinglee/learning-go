@@ -1,5 +1,9 @@
 package gotcha
 
+import (
+	"fmt"
+)
+
 /**
 ref: https://go.dev/ref/spec
 
@@ -57,17 +61,24 @@ Slice, map, and function values are not comparable. However, as a special case, 
 compared to the predeclared identifier nil. Comparison of pointer, channel, and interface values to nil is also allowed
 and follows from the general rules above.
 
-
-const c = 3 < 4 // c is the untyped boolean constant true
-
-type MyBool bool
-
-var x, y int
-var (
-	// The result of a comparison is an untyped boolean.
-	// The usual assignment rules apply.
-	b3        = x == y // b3 has type bool
-	b4 bool   = x == y // b4 has type bool
-	b5 MyBool = x == y // b5 has type MyBool
-)
 */
+
+func TestComparable() {
+	const c = 3 < 4 // c is the untyped boolean constant true
+
+	type MyBool bool
+
+	var x, y int
+	var (
+		// The result of a comparison is an untyped boolean.
+		// The usual assignment rules apply.
+		b3        = x == y // b3 has type bool
+		b4 bool   = x == y // b4 has type bool
+		b5 MyBool = x == y // b5 has type MyBool
+	)
+
+	fmt.Println(c)
+	fmt.Println(b3)
+	fmt.Println(b4)
+	fmt.Println(b5)
+}

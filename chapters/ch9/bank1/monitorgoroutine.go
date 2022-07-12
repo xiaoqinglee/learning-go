@@ -17,7 +17,7 @@ func monitor() {
 	}
 }
 
-func init() { //package的初始化语句
+func init() { //package的初始化函数(一个package可以有多个init()初始化函数)
 	go monitor()
 }
 
