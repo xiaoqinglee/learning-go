@@ -62,18 +62,51 @@ returnedValue: 22
 Process finished with the exit code 0
 */
 
-//defer陷阱
-func FuncDeferFoo() (returnedValue int) { //返回1
+//return 和 defer 的陷阱
+func bareReturn() (returnedValue int) { //返回 1
+	returnedValue = 1
+	return
+}
+
+func bareReturn2() (returnedValue int) { //返回 42
+	returnedValue = 1
+	return 42 //使用bare return的函数return语句后面如果有值, 那么这个值不会被忽略!
+}
+
+func ReturnAndDefer() (returnedValue int) { //返回 1
+	defer func() { //在defer中可以修改返回值, 当且仅当返回值使用命名写法
+		returnedValue = 1
+	}()
+	return returnedValue
+}
+
+func ReturnAndDefer2() int { //返回 0, 因为返回值列表并没有使用变量名, 所以最终返回的是在执行defer调用之前就已经计算完毕的return语句后面的操作数的值
+	returnedValue := 0
 	defer func() {
 		returnedValue = 1
 	}()
 	return returnedValue
 }
 
-func FuncDeferBar() int { //返回0, 因为返回值列表并没有使用变量名, 所以最终返回的是在执行defer调用之前就已经计算完毕的return语句后面的操作数的值
-	returnedValue := 0
+func ReturnAndDefer3() (returnedValue int) { //返回 1
 	defer func() {
 		returnedValue = 1
 	}()
-	return returnedValue
+	return 42
+}
+
+func ReturnAndDefer4() (returnedValue int) { //返回 1
+	defer func() {
+		returnedValue = 1
+	}()
+	return
+}
+
+func TestReturnAndDefer() {
+	fmt.Println(bareReturn())
+	fmt.Println(bareReturn2())
+	fmt.Println(ReturnAndDefer())
+	fmt.Println(ReturnAndDefer2())
+	fmt.Println(ReturnAndDefer3())
+	fmt.Println(ReturnAndDefer4())
 }

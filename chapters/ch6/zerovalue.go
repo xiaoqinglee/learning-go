@@ -2,6 +2,7 @@ package ch6
 
 import (
 	"fmt"
+	"os"
 )
 
 //一个type的零值是多少取决于这个type是什么具体类型的别名.
@@ -17,6 +18,9 @@ import (
 
 //nil is a predeclared identifier representing the zero value for
 //a pointer, channel, func, interface, map, or slice type.
+//nil像整数字面量一样, 是个untyped value.
+//
+//谁可以被赋值为nil, 这个集合是有限的, 赋值的左操作数不在这个集合中时, 编译器会报错:
 //Type must be a pointer, channel, func, interface, map, or slice type.
 
 //对于slice, map和channel：
@@ -266,4 +270,49 @@ func TestVarInitialization() {
 	fmt.Printf("chan2: %v\n", chan2)
 	fmt.Printf("chan2 == nil: %v\n", chan2 == nil)
 	fmt.Printf("len(chan2) == 0：%v\n", len(chan2) == 0)
+}
+
+//错误处理的正确姿势
+func NilErrorExample() error { //错误操作
+	var err *os.PathError = nil
+	fmt.Printf("err == nil: {%v}\n", err == nil) //err == nil: {true}
+	return err
+}
+
+func NilErrorExample2() error { //正确操作
+	var err *os.PathError = nil
+	fmt.Printf("err == nil: {%v}\n", err == nil) //err == nil: {true}
+	return nil
+}
+
+func NilErrorRightWay1() error { //正确操作1
+	return nil
+}
+
+func NilErrorRightWay2() (err error) { //正确操作2
+	return nil
+}
+
+func NilErrorRightWay3() (err error) { //正确操作3
+	return
+}
+
+func TestNilError() {
+	//此时 err 的类型是 error 接口
+	//当接口值中的动态类型和动态值都为nil的时候, 这个接口值 "== nil" 才为真
+	err := NilErrorExample()
+	fmt.Printf(" NilErrorExample(): err == nil: {%v}\n", err == nil) //err == nil: {false}
+	err = NilErrorExample2()
+	fmt.Printf(" NilErrorExample2(): err == nil: {%v}\n", err == nil) //err == nil: {true}
+
+	err = NilErrorRightWay1()
+	fmt.Printf(" NilErrorRightWay1(): err == nil: {%v}\n", err == nil) //err == nil: {true}
+	err = NilErrorRightWay2()
+	fmt.Printf(" NilErrorRightWay2(): err == nil: {%v}\n", err == nil) //err == nil: {true}
+	err = NilErrorRightWay3()
+	fmt.Printf(" NilErrorRightWay3(): err == nil: {%v}\n", err == nil) //err == nil: {true}
+
+	err2 := NilErrorExample()
+	err2 = nil                                                   //接口类型的变量可以被赋值为nil, that's why we write "return nil"
+	fmt.Printf("TestNilError: err2 == nil: {%v}\n", err2 == nil) //err == nil: {true}
 }

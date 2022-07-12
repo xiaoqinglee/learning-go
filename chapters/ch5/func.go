@@ -29,11 +29,6 @@ func ignoreAllParam(int, int) int {
 	return 42
 }
 
-func bareReturn() (rtn int) {
-	rtn = 22
-	return 44 //使用bare return的函数return语句后面如果有值, 那么这个值不会被忽略!
-}
-
 func sumVariadicFunction(vars ...int) (sum int) {
 	fmt.Printf("vars type: %T\n", vars)
 	for _, var_ := range vars {
@@ -68,10 +63,6 @@ func Function() {
 	//fmt.Printf("sumD == sumE %t\n", sumD == sumE)
 	////Invalid operation: sumA == sumB (the operator == is not defined on func(x int, y int) int)
 	//fmt.Printf("sumA == sumB: %t\n", sumA == sumB)
-	fmt.Println()
-
-	//测试 bare return
-	fmt.Printf("bareReturn() returns %v\n", bareReturn()) //44
 	fmt.Println()
 
 	//匿名函数

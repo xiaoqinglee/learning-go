@@ -112,6 +112,10 @@ func TypeAssertion() {
 	//if w, ok := w.(*os.File); ok{ //内部w屏蔽外部w
 	//	//use w
 	//}
+	//短变量声明语句":="与隐式词法块相关陷阱见 <<Go程序设计语言>> P23 P23 P36 P161
+	//简单来讲
+	//1.短变量声明语句不需要声明所有":="左边的变量, 如果一个变量在同一个词法块中已经声明, 对于这个变量, 短变量声明相当于赋值
+	//2.除了花括号{}创建的显式词法块, if switch for 可以创建隐式词法块.
 }
 
 func sqlQuoteString(str string) string {
