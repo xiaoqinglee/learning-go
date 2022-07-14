@@ -93,53 +93,53 @@ func (e *errorComponent) Unwrap() error {
 }
 
 type MyError struct { //我们可以在各个Error结构体中添加各自特有的字段
-	*errorComponent
+	errorComponent
 }
 type IOError struct {
-	*errorComponent
+	errorComponent
 }
 type ConnectionError struct {
-	*errorComponent
+	errorComponent
 }
 type ConnectionAbortedError struct {
-	*errorComponent
+	errorComponent
 }
 type ConnectionRefusedError struct {
-	*errorComponent
+	errorComponent
 }
 type ConnectionResetError struct {
-	*errorComponent
+	errorComponent
 }
 type FileError struct {
-	*errorComponent
+	errorComponent
 }
 type FileExistsError struct {
-	*errorComponent
+	errorComponent
 }
 type FileNotFoundError struct {
-	*errorComponent
+	errorComponent
 }
 type ValueError struct {
-	*errorComponent
+	errorComponent
 }
 type UnicodeError struct {
-	*errorComponent
+	errorComponent
 }
 type UnicodeDecodeError struct {
-	*errorComponent
+	errorComponent
 }
 type UnicodeEncodeError struct {
-	*errorComponent
+	errorComponent
 }
 
 func NewMyError(wrappedError error, msg string) error {
 	switch wrappedError.(type) {
-	case IOError:
-	case ValueError:
+	case *IOError:
+	case *ValueError:
 	default:
 		panic("Invalid Input")
 	}
-	return &MyError{errorComponent: &errorComponent{msg: msg, err: wrappedError}}
+	return &MyError{errorComponent: errorComponent{msg: msg, err: wrappedError}}
 }
 
 func NewIOError(wrappedError error, msg string) error {
@@ -149,7 +149,7 @@ func NewIOError(wrappedError error, msg string) error {
 	default:
 		panic("Invalid Input")
 	}
-	return &IOError{errorComponent: &errorComponent{msg: msg, err: wrappedError}}
+	return &IOError{errorComponent: errorComponent{msg: msg, err: wrappedError}}
 }
 func NewConnectionError(wrappedError error, msg string) error {
 	switch wrappedError.(type) {
@@ -159,18 +159,18 @@ func NewConnectionError(wrappedError error, msg string) error {
 	default:
 		panic("Invalid Input")
 	}
-	return &ConnectionError{errorComponent: &errorComponent{msg: msg, err: wrappedError}}
+	return &ConnectionError{errorComponent: errorComponent{msg: msg, err: wrappedError}}
 }
 
 func NewConnectionAbortedError(msg string) error {
 	//两个不同的实例==测试应当返回false
-	return &ConnectionAbortedError{errorComponent: &errorComponent{msg: string([]byte(msg))}}
+	return &ConnectionAbortedError{errorComponent: errorComponent{msg: string([]byte(msg))}}
 }
 func NewConnectionRefusedError(msg string) error {
-	return &ConnectionRefusedError{errorComponent: &errorComponent{msg: string([]byte(msg))}}
+	return &ConnectionRefusedError{errorComponent: errorComponent{msg: string([]byte(msg))}}
 }
 func NewConnectionResetError(msg string) error {
-	return &ConnectionResetError{errorComponent: &errorComponent{msg: string([]byte(msg))}}
+	return &ConnectionResetError{errorComponent: errorComponent{msg: string([]byte(msg))}}
 }
 
 func TestGo13Errors2() {
@@ -209,7 +209,7 @@ func TestGo13Errors2() {
 	fmt.Println(errors.Is(e3, NewConnectionAbortedError("ConnectionAbortedError: detail: xxx"))) //false
 
 	fmt.Println("测试 As --------------------")
-	//func As(err error, target any) bool 判断err实例是否是某个类型的实例wrap 0次到多次的结果, 并将该实例的写入指定区域
+	//func As(err error, target any) bool 判断err实例是否是某个类型的实例wrap 0次到多次的结果, 并将该实例地址的写入指定区域
 	var e11 *ConnectionAbortedError
 	var e22 *ConnectionError
 	var e33 *IOError
@@ -220,13 +220,13 @@ func TestGo13Errors2() {
 		fmt.Println(e33 == e3) // true, 因为 e33 *IOError 和 e3 error 动态类型和动态值都相等
 	}
 	if errors.As(e3, &e22) {
-		fmt.Println(e2)
-		fmt.Println(e22)
+		spew.Dump(e2)
+		spew.Dump(e22)
 		fmt.Println(e22 == e2)
 	}
 	if errors.As(e3, &e11) {
-		fmt.Println(e1)
-		fmt.Println(e11)
+		spew.Dump(e1)
+		spew.Dump(e11)
 		fmt.Println(e11 == e1)
 	}
 }
