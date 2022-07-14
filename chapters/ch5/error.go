@@ -76,20 +76,20 @@ func TestGo13Errors() {
 //`
 
 type eComponent struct { //参考fmt/errors.go
-	msg string
-	err error //可能是个nil, 如果是nil,那么说明当前error是最内层error //interface本质上是动态指针, 多层error的嵌套就发生在这里
+	msg   string
+	cause error //可能是个nil, 如果是nil,那么说明当前error是最内层error //interface本质上是动态指针, 多层error的嵌套就发生在这里
 }
 
 func (e *eComponent) Error() string {
-	if e.err != nil {
-		return e.msg + e.err.Error()
+	if e.cause != nil {
+		return fmt.Sprintf("%s: %v", e.msg, e.cause)
 	} else {
 		return e.msg
 	}
 }
 
 func (e *eComponent) Unwrap() error {
-	return e.err
+	return e.cause
 }
 
 type MyError struct { //我们可以在各个Error结构体中添加各自特有的字段
@@ -139,7 +139,7 @@ func NewMyError(wrappedError error, msg string) error {
 	default:
 		panic("Invalid Input")
 	}
-	return &MyError{eComponent: eComponent{msg: msg, err: wrappedError}}
+	return &MyError{eComponent: eComponent{msg: msg, cause: wrappedError}}
 }
 
 func NewIOError(wrappedError error, msg string) error {
@@ -149,7 +149,7 @@ func NewIOError(wrappedError error, msg string) error {
 	default:
 		panic("Invalid Input")
 	}
-	return &IOError{eComponent: eComponent{msg: msg, err: wrappedError}}
+	return &IOError{eComponent: eComponent{msg: msg, cause: wrappedError}}
 }
 func NewConnectionError(wrappedError error, msg string) error {
 	switch wrappedError.(type) {
@@ -159,7 +159,7 @@ func NewConnectionError(wrappedError error, msg string) error {
 	default:
 		panic("Invalid Input")
 	}
-	return &ConnectionError{eComponent: eComponent{msg: msg, err: wrappedError}}
+	return &ConnectionError{eComponent: eComponent{msg: msg, cause: wrappedError}}
 }
 
 func NewConnectionAbortedError(msg string) error {
@@ -175,9 +175,9 @@ func NewConnectionResetError(msg string) error {
 
 func TestGo13Errors2() {
 
-	e1 := NewConnectionAbortedError("ConnectionAbortedError: detail: xxx")
-	e2 := NewConnectionError(e1, "ConnectionError: ")
-	e3 := NewIOError(e2, "IOError: ")
+	e1 := NewConnectionAbortedError("ConnectionAbortedError: Detail: xxx")
+	e2 := NewConnectionError(e1, "ConnectionError")
+	e3 := NewIOError(e2, "IOError")
 
 	fmt.Println("spew.Dump --------------------")
 	spew.Dump(e1)
@@ -192,7 +192,7 @@ func TestGo13Errors2() {
 	//eInstance1 == eInstance2 判断是否是同一个error实例
 	e4 := e1
 	fmt.Println(e4 == e1)                                                               //true
-	fmt.Println(NewConnectionAbortedError("ConnectionAbortedError: detail: xxx") == e1) //false
+	fmt.Println(NewConnectionAbortedError("ConnectionAbortedError: Detail: xxx") == e1) //false
 
 	fmt.Println("测试 Unwrap --------------------")
 	//解包装
@@ -233,9 +233,11 @@ func TestGo13Errors2() {
 }
 
 // go 1.13 标准库错误处理
+//http://books.studygolang.com/gobyexample/errors/
+//https://polarisxu.studygolang.com/posts/go/translation/cockroachdb-errors-std-api/
 //https://www.flysnow.org/2019/09/06/go1.13-error-wrapping.html
 //https://www.kevinwu0904.top/blogs/golang-error/
 //https://pkg.go.dev/errors
-//https://tonybai.com/2019/10/18/errors-handling-in-go-1-13/
 //https://go.dev/blog/go1.13-errors
+//https://tonybai.com/2019/10/18/errors-handling-in-go-1-13/
 //https://segmentfault.com/a/1190000020398774
