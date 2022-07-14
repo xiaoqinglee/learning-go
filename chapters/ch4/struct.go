@@ -162,10 +162,33 @@ func AnonymousField() {
 	wheelBar.radius = 44
 	wheelBar.circle.radius = 44
 	fmt.Printf("%#v\n", wheelBar)
-
 }
+
+type ErrorFoo struct{}
+
+func (errorFoo *ErrorFoo) Error() string {
+	return fmt.Sprintf("%v", *errorFoo)
+}
+
+func printError(e error) {
+	fmt.Println(e.Error())
+}
+
+func TestFuncArgumentPassing() { //自动解引用和自动取地址仅仅对"."操作符而言, 函数参数传递类型不匹配时不会自动解引用和自动取地址
+	e := ErrorFoo{}
+
+	e.Error()    //ok
+	(&e).Error() //ok
+
+	printError(&e) //ok
+	//// Cannot use 'e' (type ErrorFoo) as the type error
+	//// Type does not implement 'error' as the 'Error' method has a pointer receiver
+	//printError(e) //not ok
+}
+
 func Struct() {
 	//TypeMethod()
 	//StructBasics()
 	//AnonymousField()
+	TestFuncArgumentPassing()
 }

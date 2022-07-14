@@ -81,10 +81,3 @@ func TestPanic2() {
 	}
 	fmt.Printf("result: %d\n", result)
 }
-
-// go 1.13 标准库错误处理
-//https://www.flysnow.org/2019/09/06/go1.13-error-wrapping.html
-//https://pkg.go.dev/errors
-//https://tonybai.com/2019/10/18/errors-handling-in-go-1-13/
-//https://go.dev/blog/go1.13-errors
-//https://segmentfault.com/a/1190000020398774
