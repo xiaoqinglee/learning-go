@@ -209,7 +209,8 @@ func TestGo13Errors2() {
 	fmt.Println(errors.Is(e3, NewConnectionAbortedError("ConnectionAbortedError: detail: xxx"))) //false
 
 	fmt.Println("测试 As --------------------")
-	//func As(err error, target any) bool 判断err实例是否是某个类型的实例wrap 0次到多次的结果, 并将该实例地址的写入指定区域
+	//func As(err error, target any) bool 判断err实例是否是某个类型的实例wrap 0次到多次的结果, 并将该实例地址写入指定区域
+	//在go1.13前只能使用switch e.(type) 来对错误进行类型判断, 能力较弱
 	var e11 *ConnectionAbortedError
 	var e22 *ConnectionError
 	var e33 *IOError
