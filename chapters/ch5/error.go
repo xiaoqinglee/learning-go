@@ -77,7 +77,7 @@ func TestGo13Errors() {
 
 type errorComponent struct { //参考fmt/errors.go
 	msg string
-	err error //可能是个nil, 如果是nil,那么说明当前error是最内层error
+	err error //可能是个nil, 如果是nil,那么说明当前error是最内层error //interface本质上是动态指针, 多层error的嵌套就发生在这里
 }
 
 func (e *errorComponent) Error() string {
