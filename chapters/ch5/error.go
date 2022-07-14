@@ -75,12 +75,12 @@ func TestGo13Errors() {
 //              +-- UnicodeEncodeError
 //`
 
-type errorComponent struct { //参考fmt/errors.go
+type eComponent struct { //参考fmt/errors.go
 	msg string
 	err error //可能是个nil, 如果是nil,那么说明当前error是最内层error //interface本质上是动态指针, 多层error的嵌套就发生在这里
 }
 
-func (e *errorComponent) Error() string {
+func (e *eComponent) Error() string {
 	if e.err != nil {
 		return e.msg + e.err.Error()
 	} else {
@@ -88,48 +88,48 @@ func (e *errorComponent) Error() string {
 	}
 }
 
-func (e *errorComponent) Unwrap() error {
+func (e *eComponent) Unwrap() error {
 	return e.err
 }
 
 type MyError struct { //我们可以在各个Error结构体中添加各自特有的字段
-	errorComponent
+	eComponent
 }
 type IOError struct {
-	errorComponent
+	eComponent
 }
 type ConnectionError struct {
-	errorComponent
+	eComponent
 }
 type ConnectionAbortedError struct {
-	errorComponent
+	eComponent
 }
 type ConnectionRefusedError struct {
-	errorComponent
+	eComponent
 }
 type ConnectionResetError struct {
-	errorComponent
+	eComponent
 }
 type FileError struct {
-	errorComponent
+	eComponent
 }
 type FileExistsError struct {
-	errorComponent
+	eComponent
 }
 type FileNotFoundError struct {
-	errorComponent
+	eComponent
 }
 type ValueError struct {
-	errorComponent
+	eComponent
 }
 type UnicodeError struct {
-	errorComponent
+	eComponent
 }
 type UnicodeDecodeError struct {
-	errorComponent
+	eComponent
 }
 type UnicodeEncodeError struct {
-	errorComponent
+	eComponent
 }
 
 func NewMyError(wrappedError error, msg string) error {
@@ -139,7 +139,7 @@ func NewMyError(wrappedError error, msg string) error {
 	default:
 		panic("Invalid Input")
 	}
-	return &MyError{errorComponent: errorComponent{msg: msg, err: wrappedError}}
+	return &MyError{eComponent: eComponent{msg: msg, err: wrappedError}}
 }
 
 func NewIOError(wrappedError error, msg string) error {
@@ -149,7 +149,7 @@ func NewIOError(wrappedError error, msg string) error {
 	default:
 		panic("Invalid Input")
 	}
-	return &IOError{errorComponent: errorComponent{msg: msg, err: wrappedError}}
+	return &IOError{eComponent: eComponent{msg: msg, err: wrappedError}}
 }
 func NewConnectionError(wrappedError error, msg string) error {
 	switch wrappedError.(type) {
@@ -159,18 +159,18 @@ func NewConnectionError(wrappedError error, msg string) error {
 	default:
 		panic("Invalid Input")
 	}
-	return &ConnectionError{errorComponent: errorComponent{msg: msg, err: wrappedError}}
+	return &ConnectionError{eComponent: eComponent{msg: msg, err: wrappedError}}
 }
 
 func NewConnectionAbortedError(msg string) error {
 	//两个不同的实例==测试应当返回false
-	return &ConnectionAbortedError{errorComponent: errorComponent{msg: string([]byte(msg))}}
+	return &ConnectionAbortedError{eComponent: eComponent{msg: string([]byte(msg))}}
 }
 func NewConnectionRefusedError(msg string) error {
-	return &ConnectionRefusedError{errorComponent: errorComponent{msg: string([]byte(msg))}}
+	return &ConnectionRefusedError{eComponent: eComponent{msg: string([]byte(msg))}}
 }
 func NewConnectionResetError(msg string) error {
-	return &ConnectionResetError{errorComponent: errorComponent{msg: string([]byte(msg))}}
+	return &ConnectionResetError{eComponent: eComponent{msg: string([]byte(msg))}}
 }
 
 func TestGo13Errors2() {
