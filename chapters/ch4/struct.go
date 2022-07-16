@@ -19,6 +19,17 @@ import (
 //
 //除了方法(成员函数)外, 一个*typeFoo实例可以直接使用"."访问typeFoo的字段(成员变量), Go会自动解引用
 
+//	a := []int{1, 2, 3, 4}
+//	b := &a
+//	fmt.Println(a[2] == (*b)[2])
+//	//fmt.Println(b[2]) //Invalid operation: 'b[2]' (type '*[]int' does not support indexing)
+//
+//	c := [...]int{1, 2, 3, 4}
+//	d := &c
+//	//For a of pointer to array type:
+//	//a[x] is shorthand for (*a)[x]
+//	fmt.Println((*d)[2] == c[2] && d[2] == c[2]) //true
+
 ////给int绑定方法, 错误!
 ////Cannot define new methods on the non-local type 'builtin.int'
 //func (instance int) IncrementBoundToType() {
