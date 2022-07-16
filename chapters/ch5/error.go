@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
+	"strings"
 )
 
 func core() error {
@@ -164,13 +165,23 @@ func NewConnectionError(wrappedError error, msg string) error {
 
 func NewConnectionAbortedError(msg string) error {
 	//两个不同的实例==测试应当返回false
-	return &ConnectionAbortedError{eComponent: eComponent{msg: string([]byte(msg))}}
+
+	//  //(*string)(0xc0001042f0)("")
+	//	//(*string)(0xc000104300)("")
+	//	//(bool) false
+	//	s1 := strings.Clone("")
+	//	s2 := strings.Clone("")
+	//	spew.Dump(&s1)
+	//	spew.Dump(&s2)
+	//	spew.Dump(&s1 == &s2)
+
+	return &ConnectionAbortedError{eComponent: eComponent{msg: strings.Clone(msg)}}
 }
 func NewConnectionRefusedError(msg string) error {
-	return &ConnectionRefusedError{eComponent: eComponent{msg: string([]byte(msg))}}
+	return &ConnectionRefusedError{eComponent: eComponent{msg: strings.Clone(msg)}}
 }
 func NewConnectionResetError(msg string) error {
-	return &ConnectionResetError{eComponent: eComponent{msg: string([]byte(msg))}}
+	return &ConnectionResetError{eComponent: eComponent{msg: strings.Clone(msg)}}
 }
 
 func TestGo13Errors2() {
