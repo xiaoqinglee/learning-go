@@ -1,3 +1,4 @@
 https://yourbasic.org/golang/
 https://yourbasic.org/golang/gotcha/
 http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/
+https://go.dev/doc/effective_go
