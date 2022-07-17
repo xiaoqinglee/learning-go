@@ -1,4 +1,4 @@
-package gotcha
+package std
 
 //	3 ways to compare slices (arrays)
 //

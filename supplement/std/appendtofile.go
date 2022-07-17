@@ -1,4 +1,4 @@
-package gotcha
+package std
 
 //	This code appends a line `of text to the file text.log. It creates the file if it doesn’t already exist.
 //

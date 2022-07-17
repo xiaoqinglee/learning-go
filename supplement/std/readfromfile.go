@@ -1,4 +1,4 @@
-package gotcha
+package std
 
 //	Read a file (stdin) line by line
 //

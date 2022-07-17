@@ -1,4 +1,4 @@
-package gotcha
+package std
 
 //	Remove all elements
 //
