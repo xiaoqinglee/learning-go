@@ -62,7 +62,7 @@ package std
 //
 //	func Search(n int, f func(int) bool) int
 
-//5. 逆序函数
+//5. 逆序函数(不排序, 只是重新定义less(), 返回新Interface)
 //
 //	Reverse returns the reverse order for data.
 //	func Reverse(data Interface) Interface
