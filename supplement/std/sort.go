@@ -67,6 +67,15 @@ package std
 //	Reverse returns the reverse order for data.
 //	func Reverse(data Interface) Interface
 
+//注意reverse Less()的定义,
+//return r.Interface.Less(j, i) 和 return ! r.Interface.Less(i, j) 是不一样的,
+//后者会让逆序后的稳定排序算法在业务逻辑上失去稳定性, 前者不会.
+
+//// Less returns the opposite of the embedded implementation's Less method.
+//func (r reverse) Less(i, j int) bool {
+//	return r.Interface.Less(j, i)
+//}
+
 //6. 将slice转换为拥有Interface默认实现的slice
 //
 //	type Float64Slice
