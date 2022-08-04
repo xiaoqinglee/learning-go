@@ -81,3 +81,10 @@ func TestPanic2() {
 	}
 	fmt.Printf("result: %d\n", result)
 }
+
+//https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover/
+//https://golang2.eddycjy.com/posts/appendix/02-goroutine-panic/
+
+//1.recover()只能捕捉当前goroutine的panic, 跨goroutine的panic捕捉不了
+//2.recover()只有放在defer里才能捕获panic
+//3.如果某个goroutine的panic最终没有被捕获, 那么整个进程都会crash, 不管这个goroutine是不是main goroutine
