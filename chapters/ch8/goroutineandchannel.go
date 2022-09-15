@@ -2,6 +2,7 @@ package ch8
 
 import (
 	"fmt"
+	"github.com/k0kubun/pp/v3"
 	"os"
 	"sync"
 	"time"
@@ -303,6 +304,37 @@ func LaunchRocket2() {
 	}
 	ticker.Stop()
 	fmt.Printf("lanch!\n")
+}
+
+func SelectDefaultPitHole() {
+
+	//0
+	//"不等你"
+	//"不等你"
+	//"不等你"
+	//"不等你"
+	a := 42
+	ch := make(chan int)
+	go func() {
+		for i := 0; i < 5; i++ {
+			ch <- i
+			for {
+				a = a + 1
+				a = a - 1
+			}
+		}
+	}()
+	go func() {
+		for i := 0; i < 5; i++ {
+			select {
+			case ii := <-ch:
+				pp.Println(ii)
+			default:
+				pp.Println("不等你")
+			}
+		}
+	}()
+	time.Sleep(time.Hour)
 }
 
 //https://studygolang.com/articles/25210
