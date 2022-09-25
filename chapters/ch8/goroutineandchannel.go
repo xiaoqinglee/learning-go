@@ -337,6 +337,94 @@ func SelectDefaultPitHole() {
 	time.Sleep(time.Hour)
 }
 
+func SwitchOnAndOff() {
+	//"=========================ch1 ch2:"
+	//(chan int)(0xc00005a2a0)
+	//(chan int)(0xc00005a2a0)
+	//"ch1 not blocked"
+	//0
+	//"ch2 not blocked"
+	//1
+	//"=========================ch1 ch2:"
+	//(chan int)(0xc00005a2a0)
+	//(chan int)(0x0)
+	//"ch1 not blocked"
+	//2
+	//"ch2 blocked"
+	//"=========================ch1 ch2:"
+	//(chan int)(0xc00005a2a0)
+	//(chan int)(0xc00005a2a0)
+	//"ch1 not blocked"
+	//3
+	//"ch2 not blocked"
+	//4
+	ch1 := make(chan int)
+	var ch2 chan int = ch1
+	go func() {
+		for i := 0; i < 42; i++ {
+			ch1 <- i
+		}
+	}()
+	time.Sleep(5 * time.Second)
+	pp.Println("=========================ch1 ch2:")
+	pp.Println(ch1)
+	pp.Println(ch2)
+	select {
+	case num := <-ch1:
+		pp.Println("ch1 not blocked")
+		pp.Println(num)
+	default:
+		pp.Println("ch1 blocked")
+	}
+	select {
+	case num := <-ch2:
+		pp.Println("ch2 not blocked")
+		pp.Println(num)
+	default:
+		pp.Println("ch2 blocked")
+	}
+
+	time.Sleep(5 * time.Second)
+	ch2 = nil
+	pp.Println("=========================ch1 ch2:")
+	pp.Println(ch1)
+	pp.Println(ch2)
+	select {
+	case num := <-ch1:
+		pp.Println("ch1 not blocked")
+		pp.Println(num)
+	default:
+		pp.Println("ch1 blocked")
+	}
+	select {
+	case num := <-ch2:
+		pp.Println("ch2 not blocked")
+		pp.Println(num)
+	default:
+		pp.Println("ch2 blocked")
+	}
+
+	time.Sleep(5 * time.Second)
+	ch2 = ch1
+	pp.Println("=========================ch1 ch2:")
+	pp.Println(ch1)
+	pp.Println(ch2)
+	select {
+	case num := <-ch1:
+		pp.Println("ch1 not blocked")
+		pp.Println(num)
+	default:
+		pp.Println("ch1 blocked")
+	}
+	select {
+	case num := <-ch2:
+		pp.Println("ch2 not blocked")
+		pp.Println(num)
+	default:
+		pp.Println("ch2 blocked")
+	}
+}
+
 //https://studygolang.com/articles/25210
 //https://golang.design/go-questions/channel/struct/
 

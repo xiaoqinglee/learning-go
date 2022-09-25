@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/k0kubun/pp/v3"
+	"github.com/xiaoqingLee/learning-go/chapters/ch8"
 	"sync"
 )
 
@@ -58,5 +59,6 @@ func Main() {
 
 func main() {
 	spew.Dump(42)
-	pp.Print(42)
+	pp.Println(42)
+	ch8.SwitchOnAndOff()
 }
