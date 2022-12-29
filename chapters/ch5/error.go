@@ -212,7 +212,7 @@ func TestGo13Errors2() {
 	fmt.Println(errors.Unwrap(e1) == nil) //true
 
 	fmt.Println("测试 Is --------------------")
-	// func Is(err, target error) bool  判断err实例是否是target实例wrap 0次到多次的结果 (注意参数targe应该是comparable的)
+	// func Is(err, target error) bool  判断err实例是否是target实例wrap 0次到多次的结果 (注意参数target应该是comparable的)
 	fmt.Println(errors.Is(e1, e1))                                                               //true
 	fmt.Println(errors.Is(e2, e1))                                                               //true
 	fmt.Println(errors.Is(e3, e1))                                                               //true

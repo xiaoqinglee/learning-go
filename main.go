@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/xiaoqingLee/learning-go/chapters/ch9"
+	"github.com/xiaoqingLee/learning-go/supplement"
 )
 
 func main() {
-	ch9.Once1()
-	ch9.Once2()
+	supplement.TestValueContext()
+	supplement.TestDerivedValueContext()
 }

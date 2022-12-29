@@ -158,6 +158,45 @@ func TestTimeoutContext() { //可以超时自动取消, 也可以在自动取消
 }
 
 func TestValueContext() {
+	type favContextKey string
+
+	f := func(ctx context.Context, k favContextKey) {
+		if v := ctx.Value(k); v != nil {
+			fmt.Println("found value:", v)
+		} else {
+			fmt.Println("key not found:", k)
+		}
+	}
+
+	k := favContextKey("language")
+	ctx := context.WithValue(context.Background(), k, "Go")
+
+	f(ctx, k)
+	f(ctx, favContextKey("color"))
+}
+
+func TestDerivedValueContext() {
+	type favContextKey string
+
+	f := func(ctx context.Context, k favContextKey) {
+		ctx2 := context.WithValue(ctx, "NewKey", "NewValue")
+		if v := ctx2.Value(k); v != nil {
+			fmt.Println("found value:", v)
+		} else {
+			fmt.Println("key not found:", k)
+		}
+		if v := ctx2.Value("NewKey"); v != nil {
+			fmt.Println("found value for NewKey:", v)
+		} else {
+			fmt.Println("key not found for NewKey:", k)
+		}
+	}
+
+	k := favContextKey("language")
+	ctx := context.WithValue(context.Background(), k, "Go")
+
+	f(ctx, k)
+	f(ctx, favContextKey("color"))
 }
 
 //	Soham Kamani 讲解:
