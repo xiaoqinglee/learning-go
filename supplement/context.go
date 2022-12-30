@@ -3,7 +3,6 @@ package supplement
 import (
 	"context"
 	"fmt"
-	"github.com/k0kubun/pp/v3"
 	"time"
 )
 
@@ -158,73 +157,56 @@ func TestTimeoutContext() { //可以超时自动取消, 也可以在自动取消
 	}
 }
 
-func TestValueContext() {
-	pp.Println("TestValueContext()")
-	type favContextKey string
+// WithValue returns a copy of parent in which the value associated with key is
+// val.
+// The provided key must be comparable and should not be of type
+// string or any other built-in type to avoid collisions between
+// packages using context. Users of WithValue should define their own
+// types for keys.
 
-	f := func(ctx context.Context, k favContextKey) {
-		if v := ctx.Value(k); v != nil {
-			fmt.Println("found value:", v)
-		} else {
-			fmt.Println("key not found:", k)
-		}
-	}
-
-	k := favContextKey("OldKeyIn")
-	ctx := context.WithValue(context.Background(), k, "OldValueIn")
-
-	f(ctx, k)
-	f(ctx, "OldKeyOut")
-}
+// 为了防止和导入的标准库和第三方工具包里面的ctx的key碰撞, 不小心覆盖旧key-val,
+// 所以要使用自定义的key类型而不是使用内建的string int64等类型,
+// 而且这个类型应该是不可导出的.
 
 func TestDerivedValueContext() {
-	pp.Println("TestDerivedValueContext()")
+
+	// 注意 context实例的key是any类型, 所以 "foo" 和 favContextKey("foo")是两个不同的key
 	type favContextKey string
 
-	f := func(ctx context.Context, k favContextKey) {
-		ctx2 := context.WithValue(ctx, "NewKey", "NewValue")
-		if v := ctx2.Value(k); v != nil {
-			fmt.Println("found value:", v)
-		} else {
-			fmt.Println("key not found:", k)
-		}
-		if v := ctx2.Value("NewKey"); v != nil {
-			fmt.Println("found value for NewKey:", v)
-		} else {
-			fmt.Println("key not found for NewKey:", k)
+	testKeys := func(ctx context.Context) {
+		for _, key := range []string{"OldKey1", "OldKey2", "OldKey3", "NewKey"} {
+			if v := ctx.Value(favContextKey(key)); v != nil {
+				fmt.Println("found:", key, v)
+			} else {
+				fmt.Println("not found:", key, v)
+			}
 		}
 	}
 
-	k := favContextKey("OldKeyIn")
-	ctx := context.WithValue(context.Background(), k, "OldValueIn")
+	origin := context.Background()
+	ctx := context.WithValue(origin, favContextKey("OldKey1"), "OldValue1")
+	ctx = context.WithValue(ctx, favContextKey("OldKey2"), "OldValue2")
+	ctx = context.WithValue(ctx, favContextKey("OldKey3"), "OldValue3")
 
-	f(ctx, k)
-	f(ctx, "OldKeyOut")
-}
+	derived := context.WithValue(ctx, favContextKey("OldKey1"), "NewValue") //"覆盖"
+	derived = context.WithValue(derived, favContextKey("OldKey2"), nil)     //"删除"
+	derived = context.WithValue(derived, favContextKey("NewKey"), "NewVal") //"新增"
 
-func TestDerivedValueContext2() {
-	pp.Println("TestDerivedValueContext2()")
-	type favContextKey string
+	testKeys(ctx)
+	testKeys(derived)
 
-	f := func(ctx context.Context, k favContextKey) {
-		ctx2 := context.WithValue(ctx, "OldKeyIn", "NewValue")
-		if v := ctx2.Value(k); v != nil {
-			fmt.Println("found value:", v)
-		} else {
-			fmt.Println("key not found:", k)
-		}
-	}
+	//context对象是immutable的, 只能拷贝.
+	//在derived context的过程中可以使用WithValue方法得一个拥有旧key新value的新context实例,
+	//表面上达到了覆盖(或删除)的效果, 但是实际上是再封装, 读取一个context的key的过程是从外到内剥洋葱寻找第一个匹配到的目标.
 
-	k := favContextKey("OldKeyIn")
-	ctx := context.WithValue(context.Background(), k, "OldValueIn")
-
-	f(ctx, k)
-
-	//context对象是immutable的, 只能拷贝, 在derived context的过程中无法使用WithValue方法得一个拥有旧key新value的新context实例
-	//https://stackoverflow.com/questions/40379960/context-withvalue-how-to-add-several-key-value-pairs
-
-	//"TestDerivedValueContext2()"
-	//found value: OldValueIn
+	//found: OldKey1 OldValue1
+	//found: OldKey2 OldValue2
+	//found: OldKey3 OldValue3
+	//not found: NewKey <nil>
+	//found: OldKey1 NewValue
+	//not found: OldKey2 <nil>
+	//found: OldKey3 OldValue3
+	//found: NewKey NewVal
 }
 
 //	Soham Kamani 讲解:
