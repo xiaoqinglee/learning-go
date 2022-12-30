@@ -168,11 +168,11 @@ func TestValueContext() {
 		}
 	}
 
-	k := favContextKey("language")
-	ctx := context.WithValue(context.Background(), k, "Go")
+	k := favContextKey("OldKeyIn")
+	ctx := context.WithValue(context.Background(), k, "OldValueIn")
 
 	f(ctx, k)
-	f(ctx, favContextKey("color"))
+	f(ctx, "OldKeyOut")
 }
 
 func TestDerivedValueContext() {
@@ -192,11 +192,11 @@ func TestDerivedValueContext() {
 		}
 	}
 
-	k := favContextKey("language")
-	ctx := context.WithValue(context.Background(), k, "Go")
+	k := favContextKey("OldKeyIn")
+	ctx := context.WithValue(context.Background(), k, "OldValueIn")
 
 	f(ctx, k)
-	f(ctx, favContextKey("color"))
+	f(ctx, "OldKeyOut")
 }
 
 //	Soham Kamani 讲解:
