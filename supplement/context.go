@@ -3,6 +3,7 @@ package supplement
 import (
 	"context"
 	"fmt"
+	"github.com/k0kubun/pp/v3"
 	"time"
 )
 
@@ -158,6 +159,7 @@ func TestTimeoutContext() { //可以超时自动取消, 也可以在自动取消
 }
 
 func TestValueContext() {
+	pp.Println("TestValueContext()")
 	type favContextKey string
 
 	f := func(ctx context.Context, k favContextKey) {
@@ -176,6 +178,7 @@ func TestValueContext() {
 }
 
 func TestDerivedValueContext() {
+	pp.Println("TestDerivedValueContext()")
 	type favContextKey string
 
 	f := func(ctx context.Context, k favContextKey) {
@@ -197,6 +200,31 @@ func TestDerivedValueContext() {
 
 	f(ctx, k)
 	f(ctx, "OldKeyOut")
+}
+
+func TestDerivedValueContext2() {
+	pp.Println("TestDerivedValueContext2()")
+	type favContextKey string
+
+	f := func(ctx context.Context, k favContextKey) {
+		ctx2 := context.WithValue(ctx, "OldKeyIn", "NewValue")
+		if v := ctx2.Value(k); v != nil {
+			fmt.Println("found value:", v)
+		} else {
+			fmt.Println("key not found:", k)
+		}
+	}
+
+	k := favContextKey("OldKeyIn")
+	ctx := context.WithValue(context.Background(), k, "OldValueIn")
+
+	f(ctx, k)
+
+	//context对象是immutable的, 只能拷贝, 在derived context的过程中无法使用WithValue方法得一个拥有旧key新value的新context实例
+	//https://stackoverflow.com/questions/40379960/context-withvalue-how-to-add-several-key-value-pairs
+
+	//"TestDerivedValueContext2()"
+	//found value: OldValueIn
 }
 
 //	Soham Kamani 讲解:

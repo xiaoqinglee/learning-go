@@ -5,6 +5,8 @@ import (
 )
 
 func main() {
-	supplement.TestValueContext()
-	supplement.TestDerivedValueContext()
+	//supplement.TestValueContext()
+	//supplement.TestDerivedValueContext()
+	supplement.TestDerivedValueContext2()
+
 }
