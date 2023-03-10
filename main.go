@@ -5,6 +5,5 @@ import (
 )
 
 func main() {
-	//supplement.TestValueContext()
-	supplement.TestDerivedValueContext()
+	supplement.CastBetweenIntAndFloat()
 }
