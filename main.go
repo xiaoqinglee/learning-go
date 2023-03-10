@@ -5,5 +5,9 @@ import (
 )
 
 func main() {
-	supplement.CastBetweenIntAndFloat()
+	//supplement.CastBetweenIntAndFloat()
+	//supplement.JsonMarshal()
+	//supplement.JsonUnmarshalWithStructSchema()
+	//supplement.JsonUnmarshalWithoutStructSchema()
+	supplement.JsonUnmarshalWithoutStructSchema2()
 }
