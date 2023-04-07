@@ -6,9 +6,9 @@ import (
 	"time"
 )
 
-// Once对象可以让传入Do()的函数只被调用一次,
+// Once对象可以让多个传入Do()的函数实例中最早传入的那个函数实例被调用,
 // 不管两次Do()调用在一个goroutine中还是在多个goroutine中
-// 不管传入Do()的函数是同一个函数还是不同的函数
+// 不管传入Do()的函数是是同一个函数指针, 还是不同的函数指针
 
 func AnyFunc() {
 	fmt.Println("AnyFunc called")
