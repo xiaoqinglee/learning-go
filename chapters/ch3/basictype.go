@@ -176,3 +176,14 @@ func Const() {
 	fmt.Printf("[]Exp{two, four, eight, sixteen}: %v\n", []Exp{two, four, eight, sixteen})
 	fmt.Println()
 }
+
+func TestUnsignedIntSub() {
+	//x= 1
+	//y= 18446744073709551615
+	var yi uint64 = 1
+	var er uint64 = 2
+	x := er - yi // var x uint64 = er - yi
+	y := yi - er // var y uint64 = yi - er
+	fmt.Println("x=", x)
+	fmt.Println("y=", y)
+}
