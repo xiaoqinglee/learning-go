@@ -209,6 +209,46 @@ func TestDerivedValueContext() {
 	//found: NewKey NewVal
 }
 
+func TestContextAsParameter() {
+
+	type favContextKey string
+
+	testKeys := func(ctx context.Context) {
+		for _, key := range []string{"oldKey", "newKey"} {
+			if v := ctx.Value(favContextKey(key)); v != nil {
+				fmt.Println("found:", key, v)
+			} else {
+				fmt.Println("not found:", key, v)
+			}
+		}
+	}
+
+	changeParam := func(ctx context.Context) {
+		ctx = context.WithValue(ctx, favContextKey("newKey"), "newValue")
+		fmt.Println("in func:")
+		testKeys(ctx)
+	}
+
+	origin := context.Background()
+	origin = context.WithValue(origin, favContextKey("oldKey"), "oldValue")
+
+	fmt.Println("out func:")
+	testKeys(origin)
+	changeParam(origin)
+	fmt.Println("out func:")
+	testKeys(origin)
+
+	//out func:
+	//found: oldKey oldValue
+	//not found: newKey <nil>
+	//in func:
+	//found: oldKey oldValue
+	//found: newKey newValue
+	//out func:
+	//found: oldKey oldValue
+	//not found: newKey <nil>
+}
+
 //	Soham Kamani 讲解:
 //	https://www.sohamkamani.com/golang/context-cancellation-and-values/
 //

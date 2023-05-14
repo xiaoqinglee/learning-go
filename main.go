@@ -1,13 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"github.com/xiaoqingLee/learning-go/supplement"
 )
 
 func main() {
-	//supplement.CastBetweenIntAndFloat()
-	//supplement.JsonMarshal()
-	//supplement.JsonUnmarshalWithStructSchema()
-	//supplement.JsonUnmarshalWithoutStructSchema()
-	supplement.JsonUnmarshalWithoutStructSchema2()
+	fmt.Println("----------------------")
+	supplement.TestDerivedValueContext()
+	fmt.Println("----------------------")
+	supplement.TestContextAsParameter()
 }
