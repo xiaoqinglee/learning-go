@@ -43,3 +43,5 @@ func RateLimit() {
 		fmt.Println("tokens in bucket:", len(tokenBucket))
 	}
 }
+
+//https://api7.ai/learning-center/openresty/how-to-deal-with-bursty-traffic
