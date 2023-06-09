@@ -1,13 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"github.com/xiaoqingLee/learning-go/supplement"
+	"github.com/xiaoqingLee/learning-go/chapters/ch5"
 )
 
 func main() {
-	fmt.Println("----------------------")
-	supplement.TestDerivedValueContext()
-	fmt.Println("----------------------")
-	supplement.TestContextAsParameter()
+	ch5.TestGo20Errors()
 }

@@ -4,16 +4,17 @@ import (
 	"errors"
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/k0kubun/pp/v3"
 	"strings"
 )
 
 func core() error {
-	return fmt.Errorf("CoreError: %s", "Detail: xxx")
+	return fmt.Errorf("CoreError: %s", "Detail: xxx") //返回 *errors.errorString
 }
 
 func midLayer(e error) error {
 	if e != nil {
-		return fmt.Errorf("MidLayerError: %w", e)
+		return fmt.Errorf("MidLayerError: %w", e) //返回 *fmt.wrapError
 	}
 	return nil
 }
@@ -58,6 +59,130 @@ func TestGo13Errors() {
 	fmt.Println(errors.Is(e3, e1))     //true
 	fmt.Println(errors.Is(e3, e2))     //true
 	fmt.Println(errors.Is(e3, core())) //false
+}
+func coreS(detail string) error {
+	return fmt.Errorf("coreS: %s", detail)
+}
+
+func midLayerS(e1, e2 error) error {
+	return fmt.Errorf("midLayerS: %w and %w", e1, e2) // 返回 *fmt.wrapErrors, 结构体中的 errs []error 字段会过滤掉 nil error
+}
+
+func topLayerS(e1, e2 error) error {
+	return errors.Join(e1, e2) // 返回 *errors.joinError, 结构体中的 errs []error 字段会过滤掉 nil error
+}
+
+//Wrapping multiple errors
+//
+//Go 1.20 expands support for error wrapping to permit an error to wrap multiple other errors.
+//
+//An error e can wrap more than one error by providing an Unwrap method that returns a []error.
+//
+//The errors.Is and errors.As functions have been updated to inspect multiply wrapped errors.
+//
+//The fmt.Errorf function now supports multiple occurrences of the %w format verb, which will cause it to return an error that wraps all of those error operands.
+//
+//The new function errors.Join returns an error wrapping a list of errors.
+
+func TestGo20Errors() {
+	coreE1 := coreS("coreE1")
+	coreE2 := coreS("coreE2")
+	midLayerSE := midLayerS(coreE1, coreE2)
+	coreE3 := core()
+	midLayerE := midLayer(coreE3)
+	topSE := topLayerS(midLayerSE, midLayerE)
+
+	midLayerSContainNilE := midLayerS(coreE1, nil)
+	topContainNilE := topLayerS(midLayerSE, nil)
+
+	fmt.Println("pp.Println --------------------")
+	//"midLayerSE:" &fmt.wrapErrors{
+	//  msg:  "midLayerS: coreS: coreE1 and coreS: coreE2",
+	//  errs: []error{
+	//    &errors.errorString{
+	//      s: "coreS: coreE1",
+	//    },
+	//    &errors.errorString{
+	//      s: "coreS: coreE2",
+	//    },
+	//  },
+	//}
+	//"midLayerE:" &fmt.wrapError{
+	//  msg: "MidLayerError: CoreError: Detail: xxx",
+	//  err: &errors.errorString{
+	//    s: "CoreError: Detail: xxx",
+	//  },
+	//}
+	//"topSE:" &errors.joinError{
+	//  errs: []error{
+	//    &fmt.wrapErrors{
+	//      msg:  "midLayerS: coreS: coreE1 and coreS: coreE2",
+	//      errs: []error{
+	//        &errors.errorString{
+	//          s: "coreS: coreE1",
+	//        },
+	//        &errors.errorString{
+	//          s: "coreS: coreE2",
+	//        },
+	//      },
+	//    },
+	//    &fmt.wrapError{
+	//      msg: "MidLayerError: CoreError: Detail: xxx",
+	//      err: &errors.errorString{
+	//        s: "CoreError: Detail: xxx",
+	//      },
+	//    },
+	//  },
+	//}
+	//"midLayerSContainNilE:" &fmt.wrapErrors{
+	//  msg:  "midLayerS: coreS: coreE1 and %!w(<nil>)",
+	//  errs: []error{
+	//    &errors.errorString{
+	//      s: "coreS: coreE1",
+	//    },
+	//  },
+	//}
+	//"topContainNilE:" &errors.joinError{
+	//  errs: []error{
+	//    &fmt.wrapErrors{
+	//      msg:  "midLayerS: coreS: coreE1 and coreS: coreE2",
+	//      errs: []error{
+	//        &errors.errorString{
+	//          s: "coreS: coreE1",
+	//        },
+	//        &errors.errorString{
+	//          s: "coreS: coreE2",
+	//        },
+	//      },
+	//    },
+	//  },
+	//}
+
+	pp.Println("midLayerSE:", midLayerSE)
+	pp.Println("midLayerE:", midLayerE)
+	pp.Println("topSE:", topSE)
+
+	pp.Println("midLayerSContainNilE:", midLayerSContainNilE)
+	pp.Println("topContainNilE:", topContainNilE)
+
+	fmt.Println("测试 Unwrap --------------------")
+	//解包装
+	fmt.Println(errors.Unwrap(midLayerE) == coreE3) //true
+	fmt.Println(errors.Unwrap(midLayerSE) == nil)   //true
+	fmt.Println(errors.Unwrap(topSE) == nil)        //true
+
+	fmt.Println(errors.Unwrap(midLayerSContainNilE) == nil) //true
+	fmt.Println(errors.Unwrap(topContainNilE) == nil)       //true
+
+	fmt.Println("测试 Is --------------------")
+	// func Is(err, target error) bool  判断err实例是否是target实例wrap 0次到多次的结果 (注意参数targe应该是comparable的)
+	fmt.Println(errors.Is(topSE, midLayerSE)) //true
+	fmt.Println(errors.Is(topSE, midLayerE))  //true
+	fmt.Println(errors.Is(topSE, coreE1))     //true
+	fmt.Println(errors.Is(topSE, coreE1))     //true
+
+	fmt.Println(errors.Is(midLayerSE, coreE1)) //true
+	fmt.Println(errors.Is(midLayerSE, coreE1)) //true
 }
 
 //`
