@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/xiaoqingLee/learning-go/chapters/ch5"
+	"github.com/xiaoqingLee/learning-go/supplement"
 )
 
 func main() {
-	ch5.TestGo20Errors()
+	supplement.ProductionReadyTokenBucket()
 }
