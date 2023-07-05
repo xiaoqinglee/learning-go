@@ -14,55 +14,56 @@ func GetInvokingFunctionName() string {
 }
 
 func returnOperator() int {
-	fmt.Printf("calling %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
 	return 33
 }
 
 func deferFuncParam() int {
-	fmt.Printf("calling %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
 	return 22
 }
 func FunctionContainingDefer() (returnedValue int) {
 	returnedValue = 11
-	fmt.Printf("calling %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
 	defer func(param int) {
 		returnedValue = param
-		fmt.Printf("calling %s\n", GetInvokingFunctionName())
+		fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
 	}(deferFuncParam())
-	fmt.Printf("calling %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
 	return returnOperator()
 }
 
-//在遇到defer语句的时候会对defer后函数调用的参数进行计算.
-//参数计算和函数调用不发生在同一时间
-func Defer() {
-	fmt.Printf("calling %s\n", GetInvokingFunctionName())
+// 在遇到defer语句的时候会对defer后函数调用的参数进行计算.
+// 参数计算和函数调用不发生在同一时间
+
+func TestDefer() {
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
 	returned := FunctionContainingDefer()
-	fmt.Printf("calling %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
 	fmt.Printf("returnedValue: %d\n", returned)
 }
 
 /*
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:37 github.com/xiaoqingLee/learning-go/chapters/ch5.Defer
+I'm now at /Users/xiaoqinglee/GolandProjects/learning-go/chapters/ch5/defer.go:40 github.com/xiaoqingLee/learning-go/chapters/ch5.TestDefer
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:27 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer
+I'm now at /Users/xiaoqinglee/GolandProjects/learning-go/chapters/ch5/defer.go:27 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:22 github.com/xiaoqingLee/learning-go/chapters/ch5.deferFuncParam
+I'm now at /Users/xiaoqinglee/GolandProjects/learning-go/chapters/ch5/defer.go:22 github.com/xiaoqingLee/learning-go/chapters/ch5.deferFuncParam
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:32 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer
+I'm now at /Users/xiaoqinglee/GolandProjects/learning-go/chapters/ch5/defer.go:32 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:17 github.com/xiaoqingLee/learning-go/chapters/ch5.returnOperator
+I'm now at /Users/xiaoqinglee/GolandProjects/learning-go/chapters/ch5/defer.go:17 github.com/xiaoqingLee/learning-go/chapters/ch5.returnOperator
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:30 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer.func1
+I'm now at /Users/xiaoqinglee/GolandProjects/learning-go/chapters/ch5/defer.go:30 github.com/xiaoqingLee/learning-go/chapters/ch5.FunctionContainingDefer.func1
 
-calling C:/Users/xiaoqing/GoLandProjects/LearningGo/chapters/ch5/defer.go:39 github.com/xiaoqingLee/learning-go/chapters/ch5.Defer
+I'm now at /Users/xiaoqinglee/GolandProjects/learning-go/chapters/ch5/defer.go:42 github.com/xiaoqingLee/learning-go/chapters/ch5.TestDefer
 
 returnedValue: 22
 
 Process finished with the exit code 0
 */
 
-//return 和 defer 的陷阱
+// return 和 defer 的陷阱
 func bareReturn() (returnedValue int) { //返回 1
 	returnedValue = 1
 	return
