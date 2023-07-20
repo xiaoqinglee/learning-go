@@ -2,6 +2,7 @@ package ch6
 
 import (
 	"fmt"
+	"github.com/k0kubun/pp/v3"
 	"os"
 )
 
@@ -27,7 +28,7 @@ import (
 //使用var初始化时，三者都是nil值。
 //使用make()方式初始化时，三者都是非nil。
 //	nil slice 可直接拿来用。
-//	nil map 不能直接使用，会panic。
+//	nil map 除了 "index 写" 动作会发生 panic, 其他动作和 length 为0的map完全一样.
 //	nil channel 可以直接使用，但是send和receive操作会永远阻塞。
 
 type AliasOfASlice []int
@@ -272,7 +273,7 @@ func TestVarInitialization() {
 	fmt.Printf("len(chan2) == 0：%v\n", len(chan2) == 0)
 }
 
-//错误处理的正确姿势
+// 错误处理的正确姿势
 func NilErrorExample() error { //错误操作
 	var err *os.PathError = nil
 	fmt.Printf("err == nil: {%v}\n", err == nil) //err == nil: {true}
@@ -315,4 +316,31 @@ func TestNilError() {
 	err2 := NilErrorExample()
 	err2 = nil                                                   //接口类型的变量可以被赋值为nil, that's why we write "return nil"
 	fmt.Printf("TestNilError: err2 == nil: {%v}\n", err2 == nil) //err == nil: {true}
+}
+
+// ref:
+// https://github.com/golang/go/issues/1713
+// https://github.com/golang/go/commit/5473103666e6ddfb4c036cbc064447759b63d9d8
+// https://go.dev/ref/spec
+
+func TestNilMap() {
+	//"len(m) = " 0
+	//"m[\"hello\"] = " nil
+	//"helloValue, ok = " nil false
+	//panic: assignment to entry in nil map
+
+	var m map[string]any
+
+	pp.Println("len(m) = ", len(m)) // allowed
+
+	for k, v := range m { // allowed
+		pp.Println(k, v)
+	}
+
+	pp.Println("m[\"hello\"] = ", m["hello"]) // allowed
+
+	helloValue, ok := m["hello"] // allowed
+	pp.Println("helloValue, ok = ", helloValue, ok)
+
+	m["hello"] = "world" //panic
 }

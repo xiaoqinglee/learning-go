@@ -1,9 +1,7 @@
 package main
 
-import (
-	"github.com/xiaoqingLee/learning-go/chapters/ch5"
-)
+import "github.com/xiaoqingLee/learning-go/chapters/ch6"
 
 func main() {
-	ch5.TestDefer()
+	ch6.TestNilMap()
 }
