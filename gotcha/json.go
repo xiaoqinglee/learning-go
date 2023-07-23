@@ -132,3 +132,32 @@ func TestJsonFieldDefaultValue() {
 		pp.Println("&GoodsItemAttrs{}", input, reMarshalled)
 	}
 }
+
+func TestUnmarshalMap() {
+	//nil &gotcha.generalMap{
+	//  Fields: map[string]interface {}{
+	//    "a": "42",
+	//  },
+	//}
+	//nil &gotcha.stringKV{
+	//  Fields: map[string]string{
+	//    "a": "42",
+	//  },
+	//}
+
+	type generalMap struct {
+		Fields map[string]any
+	}
+	type stringKV struct {
+		Fields map[string]string
+	}
+
+	target1 := &generalMap{}
+	e := json.Unmarshal([]byte(`{"fields": {"a": "42"}}`), target1)
+	pp.Println(e, target1)
+
+	target2 := &stringKV{}
+	e = json.Unmarshal([]byte(`{"fields": {"a": "42"}}`), &target2)
+	pp.Println(e, target2)
+
+}
