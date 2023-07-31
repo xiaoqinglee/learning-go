@@ -161,3 +161,45 @@ func TestUnmarshalMap() {
 	pp.Println(e, target2)
 
 }
+
+func TestNestFieldsMarshalUnMarshal() {
+
+	//{"SmallValue":"s","BigValue":"b"} <nil>
+	//<nil> &{{s} b}
+	//"============================================="
+	//{"Small":{"SmallValue":"s"},"BigValue":"b"} <nil>
+	//<nil> &{{s} b}
+
+	type Small struct {
+		SmallValue string
+	}
+	type BigUsingNestFields struct {
+		Small
+		BigValue string
+	}
+
+	src := &BigUsingNestFields{Small{"s"}, "b"}
+
+	bytes_, err := json.Marshal(src)
+	fmt.Println(string(bytes_), err)
+
+	dest := &BigUsingNestFields{}
+	e := json.Unmarshal(bytes_, dest)
+	fmt.Println(e, dest)
+
+	pp.Println("=============================================")
+
+	type BigNotUsingNestFields struct {
+		Small    Small
+		BigValue string
+	}
+
+	src2 := &BigNotUsingNestFields{Small{"s"}, "b"}
+
+	bytes_2, err := json.Marshal(src2)
+	fmt.Println(string(bytes_2), err)
+
+	dest2 := &BigNotUsingNestFields{}
+	e2 := json.Unmarshal(bytes_2, dest2)
+	fmt.Println(e2, dest2)
+}
