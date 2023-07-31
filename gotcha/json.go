@@ -203,3 +203,27 @@ func TestNestFieldsMarshalUnMarshal() {
 	e2 := json.Unmarshal(bytes_2, dest2)
 	fmt.Println(e2, dest2)
 }
+
+func TestWhenFieldIsMissing() {
+	//"TestWhenDestFieldIsMissing"
+	//&{42} <nil>
+	//"TestWhenSrcFieldIsMissing"
+	//&{42 0} <nil>
+
+	pp.Println("TestWhenDestFieldIsMissing")
+	type Dest struct {
+		A int
+	}
+	target := &Dest{}
+	e := json.Unmarshal([]byte(`{"a": 42, "b": 42}`), target)
+	fmt.Println(target, e)
+
+	pp.Println("TestWhenSrcFieldIsMissing")
+	type Dest2 struct {
+		A int
+		B int
+	}
+	target2 := &Dest2{}
+	e2 := json.Unmarshal([]byte(`{"a": 42}`), target2)
+	fmt.Println(target2, e2)
+}
