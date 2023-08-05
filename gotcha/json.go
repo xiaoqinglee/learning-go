@@ -227,3 +227,24 @@ func TestWhenFieldIsMissing() {
 	e2 := json.Unmarshal([]byte(`{"a": 42}`), target2)
 	fmt.Println(target2, e2)
 }
+
+/*某个需求: 将某个 go struct 的 json 序列化结果 作为一个 field 嵌入到某个大的 json object中:
+
+[1] if the embedded struct is proto message
+
+https://stackoverflow.com/questions/59530736/how-to-achieve-dynamic-custom-fields-of-different-data-type-using-grpc-proto
+
+https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson
+
+https://protobuf.dev/reference/protobuf/google.protobuf/
+https://protobuf.dev/reference/protobuf/google.protobuf/#any
+https://protobuf.dev/reference/protobuf/google.protobuf/#value
+
+https://pkg.go.dev/google.golang.org/protobuf@v1.31.0/types/known
+
+[2] struct embedding
+https://stackoverflow.com/questions/23045884/can-i-use-marshaljson-to-add-arbitrary-fields-to-a-json-encoding-in-golang
+
+[3] json RawMessage
+https://pkg.go.dev/encoding/json#RawMessage
+*/
