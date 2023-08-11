@@ -119,6 +119,36 @@ func String() {
 	fmt.Println(1 + integer)
 	fmt.Println("1" + strconv.Itoa(42))
 }
+
+// SplitOnBoundary splits a string on an utf8 unicode point boundary
+func SplitOnBoundary(str string, leftLengthLimit int) (left, right string) {
+	if leftLengthLimit <= 0 {
+		return "", str
+	}
+	if len(str) <= leftLengthLimit {
+		return str, ""
+	}
+	buf := []byte(str)
+
+	//最终得到的 left 长度 lenL <= leftLengthLimit.
+	//buf[leftLengthLimit-1] 是长度为 leftLengthLimit 的字节数组的最后一个字节.
+	//buf[leftLengthLimit] 是某个 unicode point 的首字节时, left 长度 lenL = leftLengthLimit;
+	//buf[leftLengthLimit] 是某个 unicode point 的非首字节时, left 长度 lenL < leftLengthLimit.
+
+	// 当 len(str) == leftLengthLimit, 时 buf[leftLengthLimit] 会 panic,
+	// 已知 len(str) > leftLengthLimit,
+	// 所以 buf[leftLengthLimit] 不会 panic.
+
+	var firstByteIndexOfRight int
+	for i := leftLengthLimit; i >= 0; i-- {
+		if utf8.RuneStart(buf[i]) {
+			firstByteIndexOfRight = i
+			break
+		}
+	}
+	return string(buf[:firstByteIndexOfRight]), string(buf[firstByteIndexOfRight:])
+}
+
 func Const() {
 	fmt.Printf("type of math.Pi: %T\n", math.Pi)
 	fmt.Printf("type of float32(math.Pi): %T\n", float32(math.Pi))
