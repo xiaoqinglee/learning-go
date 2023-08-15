@@ -228,7 +228,33 @@ func TestWhenFieldIsMissing() {
 	fmt.Println(target2, e2)
 }
 
-/*某个需求: 将某个 go struct 的 json 序列化结果 作为一个 field 嵌入到某个大的 json object中:
+// 提取 json object 的 field 原生字符串
+
+func ExtractFieldValueInJsonString() {
+	//"\"Hello\""
+	//"[1, 2, 3]"
+	//"null"
+	//"1.234"
+
+	const jsonStream = `
+	{"Message": "Hello", "Array": [1, 2, 3], "Null": null, "Number": 1.234}
+`
+	type GenerateObjRaw struct {
+		Message json.RawMessage `json:"Message,omitempty"`
+		Array   json.RawMessage `json:"Array,omitempty"`
+		Null    json.RawMessage `json:"Null,omitempty"`
+		Number  json.RawMessage `json:"Number,omitempty"`
+	}
+
+	r := &GenerateObjRaw{}
+	json.Unmarshal([]byte(jsonStream), r)
+	pp.Println(string(r.Message))
+	pp.Println(string(r.Array))
+	pp.Println(string(r.Null))
+	pp.Println(string(r.Number))
+}
+
+/*将某个 go struct 的 json 序列化结果 作为一个 field 嵌入到某个大的 json object中:
 
 [1] if the embedded struct is proto message
 
@@ -248,3 +274,7 @@ https://stackoverflow.com/questions/23045884/can-i-use-marshaljson-to-add-arbitr
 [3] json RawMessage
 https://pkg.go.dev/encoding/json#RawMessage
 */
+
+// json.RawMessage
+// https://pkg.go.dev/encoding/json#example-RawMessage-Marshal
+// https://pkg.go.dev/encoding/json#example-RawMessage-Unmarshal
