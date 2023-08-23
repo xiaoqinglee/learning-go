@@ -278,3 +278,26 @@ https://pkg.go.dev/encoding/json#RawMessage
 // json.RawMessage
 // https://pkg.go.dev/encoding/json#example-RawMessage-Marshal
 // https://pkg.go.dev/encoding/json#example-RawMessage-Unmarshal
+
+func ParseStringToInt() {
+	//&{0 0 0} json: cannot unmarshal string into Go struct field Dest.A of type int32
+	//&{42 42 42} <nil>
+
+	type Dest struct {
+		A int32
+		B int64
+		C int
+	}
+	target := &Dest{}
+	e := json.Unmarshal([]byte(`{"a": "42", "b": "42", "c": "42"}`), target)
+	fmt.Println(target, e)
+
+	type Dest2 struct {
+		A int32 `json:",string"`
+		B int64 `json:",string"`
+		C int   `json:",string"`
+	}
+	target2 := &Dest2{}
+	e2 := json.Unmarshal([]byte(`{"a": "42", "b": "42", "c": "42"}`), target2)
+	fmt.Println(target2, e2)
+}
