@@ -301,3 +301,111 @@ func ParseStringToInt() {
 	e2 := json.Unmarshal([]byte(`{"a": "42", "b": "42", "c": "42"}`), target2)
 	fmt.Println(target2, e2)
 }
+
+func ParseAnyToInt() {
+	//&{0} json: invalid use of ,string struct tag, trying to unmarshal unquoted value into int32
+	//&{42} <nil>
+	//&{0} <nil>
+	type Dest2 struct {
+		A int32 `json:",string"`
+	}
+	target2 := &Dest2{}
+	e2 := json.Unmarshal([]byte(`{"a": 42}`), target2)
+	fmt.Println(target2, e2)
+	target2 = &Dest2{}
+	e2 = json.Unmarshal([]byte(`{"a": "42"}`), target2)
+	fmt.Println(target2, e2)
+	target2 = &Dest2{}
+	e2 = json.Unmarshal([]byte(`{"a": null}`), target2)
+	fmt.Println(target2, e2)
+}
+
+func ParseAnyToJsonNumber() {
+	//&{42} <nil>
+	//&{42} <nil>
+	//&{} <nil>
+	type Dest2 struct {
+		A json.Number
+	}
+	target2 := &Dest2{}
+	e2 := json.Unmarshal([]byte(`{"a": 42}`), target2)
+	fmt.Println(target2, e2)
+	target2 = &Dest2{}
+	e2 = json.Unmarshal([]byte(`{"a": "42"}`), target2)
+	fmt.Println(target2, e2)
+	target2 = &Dest2{}
+	e2 = json.Unmarshal([]byte(`{"a": null}`), target2)
+	fmt.Println(target2, e2)
+}
+
+func TestJsonNumberVsInt() {
+	// json.Number 是string的别名, 看起来 json.Number empty 的定义是空串 "", 而不是 "0"
+
+	type Dest struct {
+		A json.Number `json:"a,omitempty"`
+		B json.Number `json:"b,omitempty"`
+		C json.Number `json:"c,omitempty"`
+	}
+	target := &Dest{A: json.Number("42"), B: json.Number("0"), C: json.Number("")}
+	bytes_, err := json.Marshal(target)
+	pp.Println(string(bytes_), err) //"{\"a\":42,\"b\":0}" nil
+
+	type Dest2 struct {
+		A int64 `json:"a,omitempty"`
+		B int64 `json:"b,omitempty"`
+		C int64 `json:"c,omitempty"`
+	}
+	target2 := &Dest2{A: 42, B: 0, C: 0}
+	bytes2, err2 := json.Marshal(target2)
+	pp.Println(string(bytes2), err2) //"{\"a\":42}" nil
+
+	//"test1:"
+	//&errors.errorString{
+	//  s: "json: invalid number literal, trying to unmarshal \"\\\"\\\"\" into Number",
+	//}
+	//"{\"a\":42,\"b\":0}" nil
+	//nil
+	//"{\"a\":42}" nil
+	pp.Println("test1:")
+	temp := &Dest{}
+	temp2 := &Dest2{}
+	e := json.Unmarshal([]byte(`{"a": "42", "b": "0", "c": ""}`), temp)
+	pp.Println(e)
+	bytes_, e = json.Marshal(temp)
+	pp.Println(string(bytes_), e)
+	e = json.Unmarshal(bytes_, temp2)
+	pp.Println(e)
+	bytes_, e = json.Marshal(temp2)
+	pp.Println(string(bytes_), e)
+
+	//"test2:"
+	//nil
+	//"{\"a\":42,\"b\":0}" nil
+	//nil
+	//"{\"a\":42}" nil
+	pp.Println("test2:")
+	temp = &Dest{}
+	temp2 = &Dest2{}
+	e = json.Unmarshal([]byte(`{"a": 42, "b": 0, "c": null}`), temp)
+	pp.Println(e)
+	bytes_, e = json.Marshal(temp)
+	pp.Println(string(bytes_), e)
+	e = json.Unmarshal(bytes_, temp2)
+	pp.Println(e)
+	bytes_, e = json.Marshal(temp2)
+	pp.Println(string(bytes_), e)
+
+}
+
+func TestUnmarshalNull() {
+	type httpRespSchema struct {
+		Success int32 `json:"success"`
+	}
+	httpRespParsed := &httpRespSchema{}
+	err := json.Unmarshal([]byte("null"), httpRespParsed)
+	if err != nil {
+		pp.Println(err)
+	} else {
+		pp.Println(httpRespParsed.Success) // goes here
+	}
+}
