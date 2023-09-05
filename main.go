@@ -1,7 +1,9 @@
 package main
 
-import "github.com/xiaoqingLee/learning-go/gotcha"
+import (
+	"github.com/xiaoqingLee/learning-go/supplement/rsa_crypto"
+)
 
 func main() {
-	gotcha.TestJsonNumberVsInt()
+	rsa_crypto.Usage()
 }
