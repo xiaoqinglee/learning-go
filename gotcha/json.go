@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/k0kubun/pp/v3"
+	"time"
 )
 
 type S struct {
@@ -463,4 +464,25 @@ func UnmarshalSomeDatatype() {
 	var u any
 	ue := json.Unmarshal(m, &u)
 	pp.Println(u, ue)
+}
+
+func MarshalAndUnmarshalTime() {
+
+	//{"ts":"2023-12-05T18:00:55.262152+08:00"} <nil>
+	//&gotcha.JsonSchemaWithTimeField{Ts:time.Date(2023, time.December, 5, 18, 0, 55, 262152000, time.Local)} <nil>
+	////{"ts":"2023-12-05T19:00:00.022777+09:00"} <nil>
+	////&gotcha.JsonSchemaWithTimeField{Ts:time.Date(2023, time.December, 5, 19, 0, 0, 22777000, time.Local)} <nil>
+
+	type JsonSchemaWithTimeField struct {
+		Ts time.Time `json:"ts"` // time.Now().In(biz.BeijingTime).Format(time.RFC3339)
+	}
+
+	time.Local, _ = time.LoadLocation("Asia/Shanghai")
+	//time.Local, _ = time.LoadLocation("Asia/Tokyo")
+	marshaled, e := json.Marshal(&JsonSchemaWithTimeField{Ts: time.Now()})
+	fmt.Println(string(marshaled), e)
+
+	var dst *JsonSchemaWithTimeField
+	e = json.Unmarshal(marshaled, &dst)
+	fmt.Printf("%#v %v \n", dst, e)
 }

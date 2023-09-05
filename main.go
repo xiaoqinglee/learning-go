@@ -1,9 +1,7 @@
 package main
 
-import (
-	"github.com/xiaoqingLee/learning-go/supplement"
-)
+import "github.com/xiaoqingLee/learning-go/gotcha"
 
 func main() {
-	supplement.WhyCanceled()
+	gotcha.MarshalAndUnmarshalTime()
 }
