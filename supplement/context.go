@@ -2,7 +2,9 @@ package supplement
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"github.com/k0kubun/pp/v3"
 	"time"
 )
 
@@ -193,6 +195,25 @@ import (
 	equality, and values must be safe for simultaneous use by multiple goroutines.
 
 */
+
+func WhyCanceled() {
+	//false false
+	//false true
+	//"==================================="
+	//false false
+	//true false
+
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	pp.Println(errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded))
+	time.Sleep(2 * time.Second)
+	pp.Println(errors.Is(ctx.Err(), context.Canceled), errors.Is(ctx.Err(), context.DeadlineExceeded))
+	cancel()
+	pp.Println("===================================")
+	ctx2, cancel2 := context.WithTimeout(context.Background(), 1*time.Second)
+	pp.Println(errors.Is(ctx2.Err(), context.Canceled), errors.Is(ctx2.Err(), context.DeadlineExceeded))
+	cancel2()
+	pp.Println(errors.Is(ctx2.Err(), context.Canceled), errors.Is(ctx2.Err(), context.DeadlineExceeded))
+}
 
 func canceledGoroutine(ctx context.Context, nums chan<- int) {
 

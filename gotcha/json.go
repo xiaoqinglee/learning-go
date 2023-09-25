@@ -409,3 +409,58 @@ func TestUnmarshalNull() {
 		pp.Println(httpRespParsed.Success) // goes here
 	}
 }
+
+func MarshalOtherThanMap() {
+	//"[1,2,3,4]" nil
+	//"null" nil
+	//"\"string\"" nil
+	//"42" nil
+	s, e := json.Marshal([]int64{1, 2, 3, 4})
+	pp.Println(string(s), e)
+
+	s, e = json.Marshal(any(nil))
+	pp.Println(string(s), e)
+
+	s, e = json.Marshal("string")
+	pp.Println(string(s), e)
+
+	s, e = json.Marshal(42)
+	pp.Println(string(s), e)
+}
+
+func UnmarshalSomeDatatype() {
+	//nil
+	//map[string]interface {}{
+	//  "float32":             4.500000,
+	//  "float64":             4.500000,
+	//  "int":                 4.000000,
+	//  "int32":               4.000000,
+	//  "int64":               4.000000,
+	//  "nil_empty_interface": nil,
+	//  "string_slice":        []interface {}{
+	//    "hello",
+	//    "world",
+	//  },
+	//  "uint32": 4.000000,
+	//  "uint64": 4.000000,
+	//} nil
+
+	input := map[string]any{
+		"int":     int(4),
+		"int32":   int32(4),
+		"int64":   int64(4),
+		"uint32":  uint32(4),
+		"uint64":  uint64(4),
+		"float32": float32(4.5),
+		"float64": float64(4.5),
+
+		"string_slice": []string{"hello", "world"},
+
+		"nil_empty_interface": nil,
+	}
+	m, me := json.Marshal(input)
+	pp.Println(me)
+	var u any
+	ue := json.Unmarshal(m, &u)
+	pp.Println(u, ue)
+}
