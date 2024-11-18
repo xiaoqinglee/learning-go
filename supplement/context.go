@@ -314,6 +314,10 @@ func TestDerivedValueContext() {
 	//found: NewKey NewVal
 }
 
+// 这里讲得通，context.Context 的类型是 interface，
+// 它的底层是一个struct（这个事实不影响我们将interface称为一种引用类型），
+// struct作为函数参数传递的时候发生了struct的拷贝。
+
 func TestContextAsParameter() {
 
 	type favContextKey string
@@ -371,3 +375,7 @@ func TestContextAsParameter() {
 //`
 //	goroutine: sq, merge, main
 //	chan: in, out, done (都是无缓冲的)
+
+//also see
+//https://pkg.go.dev/context@go1.23.3#WithCancelCause
+//https://pkg.go.dev/context@go1.23.3#WithoutCancel

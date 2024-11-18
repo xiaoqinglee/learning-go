@@ -68,6 +68,20 @@ func InterfaceAssignment() {
 
 }
 
+// interface实际上就是一个结构体，包含两个成员。其中一个成员是指向具体数据的指针，另一个成员中包含了类型信息。
+// 空接口和带方法的接口略有不同，下面分别是空接口和带方法的接口是使用的数据结构：
+//
+//	struct Eface
+//	{
+//	   Type*    type;
+//	   void*    data;
+//	};
+//	struct Iface
+//	{
+//	   Itab*    tab;
+//	   void*    data;
+//	};
+
 func TypeAssertion() {
 	//类型断言
 	var w io.Writer
@@ -82,7 +96,7 @@ func TypeAssertion() {
 	//b := w.(*bytes.Buffer) //panic: interface conversion: io.Writer is *os.File, not *bytes.Buffer
 	//fmt.Printf("%s\n", b)
 
-	//(2)断言成一个方法更多的接口类型
+	//(2)断言这个变量的类型实现了某个接口
 	rw := w.(io.ReadWriter)
 	fmt.Printf("%#v\n", rw)
 	//w = new(ByteCounter)
@@ -98,7 +112,7 @@ func TypeAssertion() {
 	b, ok := w.(*bytes.Buffer)
 	fmt.Printf("%#v %t\n", b, ok)
 
-	//(2)断言成一个方法更多的接口类型
+	//(2)断言这个变量的类型实现了某个接口
 	rw, ok = w.(io.ReadWriter)
 	fmt.Printf("%#v %t\n", rw, ok)
 	w = new(ByteCounter)

@@ -82,3 +82,7 @@ func TestComparable() {
 	fmt.Println(b4)
 	fmt.Println(b5)
 }
+
+//see:
+//https://pkg.go.dev/builtin#comparable
+//https://pkg.go.dev/cmp#Ordered

@@ -102,3 +102,14 @@ func TestReverse() {
 }
 
 //https://learnku.com/articles/38269
+
+//also see:
+//https://pkg.go.dev/slices#BinarySearch
+//https://pkg.go.dev/slices#BinarySearchFunc
+//https://pkg.go.dev/slices#IsSorted
+//https://pkg.go.dev/slices#IsSortedFunc
+//https://pkg.go.dev/slices#Sort
+//https://pkg.go.dev/slices#SortFunc
+//https://pkg.go.dev/slices#Sorted
+//https://pkg.go.dev/slices#SortedFunc
+//https://pkg.go.dev/slices#SortedStableFunc

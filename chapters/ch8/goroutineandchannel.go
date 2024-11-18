@@ -25,7 +25,7 @@ func UnbufferedChannel() {
 	time.Sleep(time.Second * 5)
 }
 
-func UnbufferedChannelWaitSignal() { //实现goroutine之间的等停(完成condition variable功能只一对一)
+func UnbufferedChannelWaitSignal() { //实现goroutine之间的等停(完成condition variable功能（仅限一对一）)
 	done := make(chan struct{})
 	go func() {
 		fmt.Println("doing long-time job")
@@ -117,11 +117,11 @@ func TryClosedChannel() {
 	x, ok = <-ch1
 	fmt.Printf("main: x: %v ok: %t\n", x, ok)
 	x = <-ch1
-	fmt.Printf("main: x: %v ok: %t\n", x, ok)
+	fmt.Printf("main: x: %v\n", x)
 	x, ok = <-ch1
 	fmt.Printf("main: x: %v ok: %t\n", x, ok)
 	x = <-ch1
-	fmt.Printf("main: x: %v ok: %t\n", x, ok)
+	fmt.Printf("main: x: %v\n", x)
 	fmt.Println()
 
 	ch2 := make(chan int)
@@ -227,22 +227,22 @@ func SemaphoreUsingChannelElemAsToken() { //多元信号量 (01信号量实现�
 }
 
 /*
-select{
-	case <-ch1: //可能会阻塞
-		//...
-	case x := <-ch2: //可能会阻塞
-		//...
-	case ch3 <- y: //可能会阻塞
-		//...
-	default: //如果存在这个分支, 那么这个分支永远不阻塞, 但是当前分支优先级低, 所有case均阻塞时, 这个default后面的内容才会执行
-		//...
-}
+	select{
+		case <-ch1: //可能会阻塞
+			//...
+		case x := <-ch2: //可能会阻塞
+			//...
+		case ch3 <- y: //可能会阻塞
+			//...
+		default: //如果存在这个分支, 那么这个分支永远不阻塞, 但是当前分支优先级低, 所有case均阻塞时, 这个default后面的内容才会执行
+			//...
+	}
 */
 var cancelSignal = make(chan struct{})
 
-//另一个goroutine close cancelSignal通道后, 在当前goroutine内调用cancelled()就可以感知到外部传进来的消息了
-//注意一定要使用close, 而不是向通道推入一个元素,
-//因为多个goroutine都需要使用cancelled()时, 无法保证元素推入数量和消费数量一致从而导致内存泄漏.
+// 另一个goroutine close cancelSignal通道后, 在当前goroutine内调用cancelled()就可以感知到外部传进来的消息了
+// 注意一定要使用close, 而不是向通道推入一个元素,
+// 因为多个goroutine都需要使用cancelled()时, 无法保证元素推入数量和消费数量一致从而导致内存泄漏.
 func cancelled() bool {
 	select {
 	case <-cancelSignal:
@@ -291,6 +291,7 @@ func LaunchRocket2() {
 	}()
 
 	var ticker *time.Ticker = time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
 	var tickerChan <-chan time.Time = ticker.C
 	fmt.Printf("倒计时:\n")
 	for i := 10; i > 0; i-- {
@@ -302,7 +303,6 @@ func LaunchRocket2() {
 			return
 		}
 	}
-	ticker.Stop()
 	fmt.Printf("lanch!\n")
 }
 
@@ -428,6 +428,7 @@ func SwitchOnAndOff() {
 //https://studygolang.com/articles/25210
 //https://golang.design/go-questions/channel/struct/
 
+//chan 底层是一个指向 runtime.hchan 结构体的指针
 //channel 数据结构(go 1.9.2):
 //type hchan struct {
 //	// chan 里元素数量

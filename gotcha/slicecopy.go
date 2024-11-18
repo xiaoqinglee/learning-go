@@ -34,3 +34,6 @@ package gotcha
 //	dst: [1 2 3]
 //
 //https://yourbasic.org/golang/gotcha-copy-missing/
+
+//also see:
+//https://pkg.go.dev/slices#Clone

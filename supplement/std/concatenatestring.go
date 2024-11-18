@@ -25,3 +25,5 @@ func NewWay() { //From Go 1.10 there is a strings.Builder type.
 
 	fmt.Println(sb.String())
 }
+
+//also see https://pkg.go.dev/strings#Join

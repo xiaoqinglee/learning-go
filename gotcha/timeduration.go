@@ -11,8 +11,7 @@ package gotcha
 //
 //	There is no mixing of numeric types in Go. You can only multiply a time.Duration with
 //
-//	another time.Duration, or
-//	an untyped integer constant.
+//	another time.Duration, or an untyped integer constant.
 //
 //	Here are three correct examples.
 //

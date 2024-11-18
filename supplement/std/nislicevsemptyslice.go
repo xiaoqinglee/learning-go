@@ -1,6 +1,6 @@
 package std
 
-//	Remove all elements
+//	Remove all elements of a slice
 //
 //	To remove all elements, simply set the slice to nil.
 //
@@ -55,3 +55,6 @@ package std
 //	The Go wiki: Declaring empty slices
 //
 //https://yourbasic.org/golang/clear-slice/
+
+//to remove all elements of a map, use
+//https://pkg.go.dev/builtin#clear

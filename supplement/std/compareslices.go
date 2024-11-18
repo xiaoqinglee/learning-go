@@ -44,3 +44,7 @@ package std
 //	The performance of this function is much worse than for the code above, but it’s useful in test cases where simplicity and correctness are crucial. The semantics, however, are quite complicated.
 //
 //https://yourbasic.org/golang/compare-slices/
+
+//for go versions above 1.23, see
+//https://pkg.go.dev/slices#Compare
+//https://pkg.go.dev/slices#Equal

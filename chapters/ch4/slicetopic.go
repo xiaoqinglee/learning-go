@@ -20,15 +20,15 @@ func modifySliceInRightWay2(sliceStructPointerReplica *[]int) {
 }
 
 /*
-	outside: 1. []int{0, 1, 2, 3}
-	[]int{0, 1, 2, 3}
-	[]int{0, 1, 2, 3, 21}
-	outside: 2. []int{0, 1, 2, 3}
-	[]int{0, 1, 2, 3}
-	[]int{0, 1, 2, 3, 42}
-	outside: 3. []int{0, 1, 2, 3, 42}
-	[]int{0, 1, 2, 3, 42, 84}
-	outside: 4. []int{0, 1, 2, 3, 42, 84}
+outside: 1. []int{0, 1, 2, 3}
+[]int{0, 1, 2, 3}
+[]int{0, 1, 2, 3, 21}
+outside: 2. []int{0, 1, 2, 3}
+[]int{0, 1, 2, 3}
+[]int{0, 1, 2, 3, 42}
+outside: 3. []int{0, 1, 2, 3, 42}
+[]int{0, 1, 2, 3, 42, 84}
+outside: 4. []int{0, 1, 2, 3, 42, 84}
 */
 func ModifySlice() {
 	sliceVar := []int{0, 1, 2, 3}
@@ -41,35 +41,35 @@ func ModifySlice() {
 	fmt.Printf("outside: 4. %#v\n", sliceVar)
 }
 
-//order matters
+// order matters
 func deleteElemAtIndexOrdered(slice []int, s int) []int {
 	return append(slice[:s], slice[s+1:]...)
 }
 
-//order doesn't matter
+// order doesn't matter
 func deleteElemAtIndexUnordered(slice []int, i int) []int {
 	slice[i] = slice[len(slice)-1]
 	return slice[:len(slice)-1]
 }
 
 /*
-	长度大于1的slice删除中间元素:
-	[0 1 2 3 4 5 6 7]
-	[0 1 2 3 4 6 7]
-	[0 1 2 7 4 6]
-	长度大于1的slice删除首尾元素:
-	[0 1 2 3 4 5 6 7]
-	[0 1 2 3 4 5 6]
-	[1 2 3 4 5 6]
-	--------------------
-	[0 1 2 3 4 5 6 7]
-	[0 1 2 3 4 5 6]
-	[6 1 2 3 4 5]
-	长度等于1的slice删除唯一元素:
-	[0]
-	[]
-	[0]
-	[]
+长度大于1的slice删除中间元素:
+[0 1 2 3 4 5 6 7]
+[0 1 2 3 4 6 7]
+[0 1 2 7 4 6]
+长度大于1的slice删除首尾元素:
+[0 1 2 3 4 5 6 7]
+[0 1 2 3 4 5 6]
+[1 2 3 4 5 6]
+--------------------
+[0 1 2 3 4 5 6 7]
+[0 1 2 3 4 5 6]
+[6 1 2 3 4 5]
+长度等于1的slice删除唯一元素:
+[0]
+[]
+[0]
+[]
 */
 func DeleteElemAtIndex() {
 	fmt.Println("长度大于1的slice删除中间元素:")
@@ -108,17 +108,17 @@ func DeleteElemAtIndex() {
 }
 
 /*
-	go中索引操作的范围为闭区间[0,len(x)-1],
-	但是切片时允许使用[len(x):]获得尾部一个空切片, 允许使用[:0]获得一个头部的空切片
-	[len(x):]等价于[len(x):len(x)], [:0]等价于[0:0]
+go中索引操作的范围为闭区间[0,len(x)-1],
+但是切片时允许使用[len(x):]获得尾部一个空切片, 允许使用[:0]获得一个头部的空切片
+[len(x):]等价于[len(x):len(x)], [:0]等价于[0:0]
 
-		array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
-		slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
-		-----------------
-		slice2: []int{}
-		slice3: []int{}
-		slice4: []int{}
-		slice5: []int{}
+	array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
+	slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
+	-----------------
+	slice2: []int{}
+	slice3: []int{}
+	slice4: []int{}
+	slice5: []int{}
 */
 func SliceIndex() {
 	array1 := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
@@ -141,20 +141,21 @@ func SliceIndex() {
 }
 
 /*
-	append 会在原slice变量的底层数组上进行原位操作, 而不是初始化一个新的底层数组.
-		array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
-		slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
-		after deletion:
-		array1: [8]int{0, 1, 2, 4, 5, 6, 7, 7}
-		slice1: []int{0, 1, 2, 4, 5, 6, 7, 7} <slice1已经改变>
-		slice2: []int{0, 1, 2, 4, 5, 6, 7}
-		----------------------------------
-		array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
-		slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
-		after deletion:
-		array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
-		slice1: []int{0, 1, 2, 3, 4, 5, 6, 7} <slice1没有改变>
-		slice2: []int{0, 1, 2, 4, 5, 6, 7}
+append 会在原slice变量的底层数组上进行原位操作, 而不是初始化一个新的底层数组.
+
+	array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
+	slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
+	after deletion:
+	array1: [8]int{0, 1, 2, 4, 5, 6, 7, 7}
+	slice1: []int{0, 1, 2, 4, 5, 6, 7, 7} <slice1已经改变>
+	slice2: []int{0, 1, 2, 4, 5, 6, 7}
+	----------------------------------
+	array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
+	slice1: []int{0, 1, 2, 3, 4, 5, 6, 7}
+	after deletion:
+	array1: [8]int{0, 1, 2, 3, 4, 5, 6, 7}
+	slice1: []int{0, 1, 2, 3, 4, 5, 6, 7} <slice1没有改变>
+	slice2: []int{0, 1, 2, 4, 5, 6, 7}
 */
 func UnderSliceAppend() {
 	array1 := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
@@ -206,3 +207,9 @@ func AdvancedSlice() {
 	s2 = numbers[1:4:4]
 	fmt.Printf("len:  %v, cap: %v\n", len(s2), cap(s2)) //len:  3, cap: 3
 }
+
+//also see:
+//https://pkg.go.dev/slices#Concat
+//https://pkg.go.dev/slices#AppendSeq
+//https://pkg.go.dev/slices#Delete
+//https://pkg.go.dev/slices#Clone

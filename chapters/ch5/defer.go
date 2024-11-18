@@ -14,22 +14,22 @@ func GetInvokingFunctionName() string {
 }
 
 func returnOperator() int {
-	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName()) //No.5
 	return 33
 }
 
 func deferFuncParam() int {
-	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName()) //No.3
 	return 22
 }
 func FunctionContainingDefer() (returnedValue int) {
 	returnedValue = 11
-	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName()) //No.2
 	defer func(param int) {
 		returnedValue = param
-		fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
+		fmt.Printf("I'm now at %s\n", GetInvokingFunctionName()) //No.6
 	}(deferFuncParam())
-	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName()) //No.4
 	return returnOperator()
 }
 
@@ -37,10 +37,10 @@ func FunctionContainingDefer() (returnedValue int) {
 // 参数计算和函数调用不发生在同一时间
 
 func TestDefer() {
-	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName()) //No.1
 	returned := FunctionContainingDefer()
-	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName())
-	fmt.Printf("returnedValue: %d\n", returned)
+	fmt.Printf("I'm now at %s\n", GetInvokingFunctionName()) //No.7
+	fmt.Printf("returnedValue: %d\n", returned)              //值是22
 }
 
 /*

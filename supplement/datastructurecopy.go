@@ -8,7 +8,7 @@ type girl struct {
 }
 
 func Copy() {
-	//非引用数据类型赋值就是值的拷贝(array, struct)
+	//值的拷贝(array, struct)
 	g1 := girl{
 		name: "晴雯",
 		age:  21,
@@ -37,3 +37,7 @@ func Copy() {
 		newMap[key] = value
 	}
 }
+
+//also see:
+//https://pkg.go.dev/slices#Clone
+//https://pkg.go.dev/maps#Clone

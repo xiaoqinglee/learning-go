@@ -2,6 +2,8 @@ package std
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 	"sort"
 )
 
@@ -33,3 +35,10 @@ func SortMapKeys() {
 //		values = append(values, v)
 //	}
 //}
+
+func SortMapKeys2() {
+	m := map[string]int{"Alice": 23, "Eve": 2, "Bob": 25}
+	for _, k := range slices.Sorted(maps.Keys(m)) {
+		fmt.Println(k, m[k])
+	}
+}

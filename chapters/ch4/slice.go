@@ -93,3 +93,8 @@ func Slice() {
 	fmt.Printf("%p -> %v\n", &y, y)
 	fmt.Println()
 }
+
+//for go versions above 1.23, see
+//https://pkg.go.dev/slices#Compare
+//https://pkg.go.dev/slices#Equal
+//https://pkg.go.dev/slices#Clone
